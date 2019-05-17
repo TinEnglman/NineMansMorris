@@ -1,7 +1,13 @@
-#include <SDL.h>
+#include "Window.h"
 
 int main(int argc, char **argv)
 {
-	SDL_Init(SDL_INIT_EVERYTHING);
+	Window window("SDL Tutorilo", 800, 600);
+	while (!window.isClosed())
+	{
+		window.pollEvents();
+		window.clear();
+	}
+	
 	return 0;
 }
