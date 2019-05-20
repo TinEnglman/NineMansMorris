@@ -3,6 +3,8 @@
 #include "Window.h"
 #include "Renderer.h"
 #include "ImageBox.h"
+#include "SceneManager.h"
+#include "ViewFactory.h"
 
 
 int main(int argc, char **argv)
@@ -13,17 +15,23 @@ int main(int argc, char **argv)
 	renderer->Init(window->GetWindow());
 	window->SetRenderer(renderer);
 
-	ImageBox* background = new ImageBox(window, renderer, 0, 256, 768, 768, "res/background.png");
-	ImageBox* whiteFigure = new ImageBox(window, renderer, 128, 256 + 128, 48, 48, "res/white_figure.png");
-	ImageBox* blackFigure = new ImageBox(window, renderer, 64, 256 + 64, 48, 48, "res/black_figure.png");
+	SceneManager* sceneManager = new SceneManager();
+	ViewFactory* viewFactory = new ViewFactory(window, renderer);
+
+	auto background = viewFactory->CreateImageBox(0, 256, 768, 768, "background.png");
+	sceneManager->AddViewBox((ViewBox*)background);
+	
+	auto whitePiece = viewFactory->CreateImageBox(128, 256 + 128, 48, 48, "white_figure.png");
+	sceneManager->AddViewBox((ViewBox*)whitePiece);
+
+	auto blackPiece = viewFactory->CreateImageBox(64, 256 + 64, 48, 48, "black_figure.png");
+	sceneManager->AddViewBox((ViewBox*)blackPiece);
 	
 	while (!window->IsClosed())
 	{
 		window->PollEvents();
 		window->Clear();
-		background->Draw();
-		whiteFigure->Draw();
-		blackFigure->Draw();
+		sceneManager->Draw();
 		window->Present();
 	}
 

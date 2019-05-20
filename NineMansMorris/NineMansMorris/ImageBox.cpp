@@ -1,9 +1,15 @@
 #include <iostream>
 #include "ImageBox.h"
 
-ImageBox::ImageBox(Window *window, Renderer* renderer, int x, int y, int w, int h, const std::string &path) :
-	_window(window), _renderer(renderer), _x(x), _y(y), _w(w), _h(h)
+ImageBox::ImageBox(Window *window, Renderer* renderer, int x, int y, int w, int h, const std::string &path)
 {
+	_window = window;
+	_renderer = renderer;
+	_x = x;
+	_y = y;
+	_w = w;
+	_h = h;
+	
 	auto surface = IMG_Load(path.c_str());
 	if (!surface)
 	{

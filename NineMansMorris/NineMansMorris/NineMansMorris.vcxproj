@@ -26,7 +26,10 @@
     <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Slot.cpp" />
+    <ClCompile Include="TextBox.cpp" />
+    <ClCompile Include="ViewFactory.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -36,7 +39,11 @@
     <ClInclude Include="Figure.h" />
     <ClInclude Include="ImageBox.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Slot.h" />
+    <ClInclude Include="TextBox.h" />
+    <ClInclude Include="ViewBox.h" />
+    <ClInclude Include="ViewFactory.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
