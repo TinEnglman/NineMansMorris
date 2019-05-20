@@ -2,6 +2,7 @@
 
 #include <string>
 #include <SDL.h>
+#include <SDL_image.h>
 
 #include "Renderer.h"
 
@@ -17,6 +18,7 @@ public:
 	bool Init(); 
 	void PollEvents();
 	void Clear() const;
+	void Present() const;
 	SDL_Window* GetWindow();
 	void SetRenderer(Renderer* renderer);
 

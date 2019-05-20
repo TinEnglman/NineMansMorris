@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <SDL_image.h>
 #include "Window.h"
 
 
@@ -12,6 +12,7 @@ Window::Window(const std::string &title, int width, int height) :
 Window::~Window()
 {
 	SDL_DestroyWindow(_window);
+	IMG_Quit();
 }
 
 bool Window::Init()
@@ -19,6 +20,12 @@ bool Window::Init()
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
 		std::cerr << "Failed to initalize SDL.\n";
+		return false;
+	}
+
+	if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG)
+	{
+		std::cerr << "Failed to initalize SDL image. \n";
 		return false;
 	}
 
@@ -60,9 +67,13 @@ void Window::SetRenderer(Renderer* renderer)
 }
 
 
-void Window::Clear() const // ripe for refactor
+void Window::Clear() const
 {
-	SDL_SetRenderDrawColor(_renderer->GetRenderer(), 0, 0, 255, 255);
+	SDL_SetRenderDrawColor(_renderer->GetRenderer(), 0, 0, 0, 255);
 	SDL_RenderClear(_renderer->GetRenderer());
+}
+
+void Window::Present() const
+{
 	SDL_RenderPresent(_renderer->GetRenderer());
 }
