@@ -1,18 +1,17 @@
+#include <iostream>
+
 #include "Window.h"
 
-#include <iostream>
 
 Window::Window(const std::string &title, int width, int height) :
 	_title(title), _width(width), _height(height)
 {
-	_closed = !Init();
+	_closed = false;
 }
 
 Window::~Window()
 {
 	SDL_DestroyWindow(_window);
-	SDL_DestroyRenderer(_renderer);
-	SDL_Quit();
 }
 
 bool Window::Init()
@@ -30,19 +29,10 @@ bool Window::Init()
 		std::cerr << "Failed to create window.\n";
 		return false;
 	}
-
-	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_PRESENTVSYNC);
-
-	if (_renderer == nullptr)
-	{
-		std::cerr << "Failed to create renderer.\n";
-		return false;
-	}
-
 	return true;
 }
 
-void Window::pollEvents()
+void Window::PollEvents()
 {
 	SDL_Event event;
 
@@ -59,19 +49,20 @@ void Window::pollEvents()
 	}
 }
 
-void Window::clear() const
+SDL_Window* Window::GetWindow()
 {
-	SDL_SetRenderDrawColor(_renderer, 0, 0, 200, 255);
-	SDL_RenderClear(_renderer);
+	return _window;
+}
 
-	SDL_Rect rect;
-	rect.w = 120;
-	rect.h = 120;
-	rect.x = _width / 2 - rect.w / 2;
-	rect.y = _height / 2 - rect.h / 2;
+void Window::SetRenderer(Renderer* renderer)
+{
+	_renderer = renderer;
+}
 
-	SDL_SetRenderDrawColor(_renderer, 0, 255, 0, 200);
-	SDL_RenderFillRect(_renderer, &rect);
 
-	SDL_RenderPresent(_renderer);
+void Window::Clear() const // ripe for refactor
+{
+	SDL_SetRenderDrawColor(_renderer->GetRenderer(), 0, 0, 255, 255);
+	SDL_RenderClear(_renderer->GetRenderer());
+	SDL_RenderPresent(_renderer->GetRenderer());
 }

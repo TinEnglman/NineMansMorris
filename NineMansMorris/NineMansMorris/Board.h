@@ -10,7 +10,7 @@ public:
 	Board();
 	~Board();
 
-	void addSlot(Slot *slot);
+	void AddSlot(Slot *slot);
 
 private:
 	std::vector<Slot*> _slots;

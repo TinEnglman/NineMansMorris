@@ -6,7 +6,7 @@ Board::Board()
 
 }
 
-void Board::addSlot(Slot* slot)
+void Board::AddSlot(Slot* slot)
 {
 	_slots.push_back(slot);
 }

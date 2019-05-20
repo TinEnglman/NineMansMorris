@@ -3,27 +3,29 @@
 #include <string>
 #include <SDL.h>
 
+#include "Renderer.h"
+
+
 class Window
 {
 public:
 	Window(const std::string &title, int width, int height);
 	~Window();
 
-	void pollEvents();
-	void clear() const;
 	
-	inline bool isClosed() const { return _closed; };
-
-private:
-	bool Init();
-
+	inline bool IsClosed() const { return _closed; };
+	bool Init(); 
+	void PollEvents();
+	void Clear() const;
+	SDL_Window* GetWindow();
+	void SetRenderer(Renderer* renderer);
 
 private:
 	std::string _title;
-	int _width = 1024;
-	int _height = 768;
+	int _width = 0;
+	int _height = 0;
 
 	bool _closed = false;
 	SDL_Window *_window = nullptr;
-	SDL_Renderer *_renderer = nullptr;
+	Renderer* _renderer = nullptr;
 };
