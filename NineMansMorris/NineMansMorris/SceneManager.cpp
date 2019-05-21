@@ -1,3 +1,4 @@
+#include <array>
 #include "SceneManager.h"
 #include "ImageBox.h"
 
@@ -33,12 +34,38 @@ void SceneManager::SetupInitialSlots()
 		}
 	}
 }
-/*
+
 void SceneManager::SetupBoardSlots()
 {
-
+	const int NUM_SLOTS = 24;
+	std::array<int, NUM_SLOTS> slotPositionsX
+	{
+		76, 360, 644,
+		172, 360, 550,
+		265, 360, 455,
+		76, 172, 265, 455, 550, 644,
+		265, 360, 455,
+		172, 360, 550,
+		76, 360, 644
+	};
+	std::array<int, NUM_SLOTS> slotPositionsY
+	{
+		330, 330, 330, 
+		424, 424, 424,
+		520, 520, 520,
+		614, 614, 614, 614, 614, 614,
+		706, 706, 706,
+		800, 800, 800,
+		898, 898, 898
+	};
+	
+	for (int i = 0; i < NUM_SLOTS; i++)
+	{
+		Figure* figure = CreateWhiteFigure();
+		CreateInitialSlot(slotPositionsX[i], slotPositionsY[i], figure);
+	}
 }
-*/
+
 
 void SceneManager::SetupBackground()
 {

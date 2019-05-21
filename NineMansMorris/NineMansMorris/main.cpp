@@ -6,8 +6,6 @@
 #include "SceneManager.h"
 #include "ViewFactory.h"
 
-
-
 int main(int argc, char **argv)
 {
 	const int SCREEN_W = 768;
@@ -16,18 +14,17 @@ int main(int argc, char **argv)
 	Renderer* renderer = new Renderer();
 	Window* window = new Window("Nine Mans Morris", SCREEN_W, SCREEN_H);
 	window->Init();
-	
 	renderer->Init(window->GetWindow());
 	window->SetRenderer(renderer);
 
 	Font* font = new Font("arial.ttf");
 	ViewFactory* viewFactory = new ViewFactory(window, renderer, font);
-	
 	SceneManager* sceneManager = new SceneManager(viewFactory);
 	
 	sceneManager->SetupBackground();
 	sceneManager->SetupGUI();
 	sceneManager->SetupInitialSlots();
+	sceneManager->SetupBoardSlots();
 
 	while (!window->IsClosed())
 	{
