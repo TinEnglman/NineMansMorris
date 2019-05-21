@@ -1,5 +1,7 @@
 #include <iostream>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
+
 #include "Window.h"
 
 
@@ -13,9 +15,10 @@ Window::~Window()
 {
 	SDL_DestroyWindow(_window);
 	IMG_Quit();
+	TTF_Quit();
 }
 
-bool Window::Init()
+bool Window::Init() // to much responsibility, refactor
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
