@@ -12,6 +12,7 @@ public:
 	~ImageBox();
 
 	virtual void Draw();
+	void SetPosition(int x, int y);
 
 private:
 	SDL_Texture* _texture = nullptr;

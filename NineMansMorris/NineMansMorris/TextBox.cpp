@@ -24,7 +24,7 @@ void TextBox::Draw()
 
 void TextBox::SetColor(int r, int g, int b)
 {
-	SDL_Color color = { r, g, b, _textColor.a};
+	SDL_Color color = { (Uint8)r, (Uint8)g, (Uint8)b, _textColor.a};
 	_textColor = color;
 	Refresh();
 }

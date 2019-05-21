@@ -1,12 +1,18 @@
 #pragma once
+#include "Figure.h"
 
 class Slot
 {
 public:
-	Slot();
+	Slot(int x, int y);
 	~Slot();
 
-private:
-	int index;
+	void SetFigure(Figure* figure);
+	Figure* GetFigure();
+	void UpdateFigurePosition();
 
+private:
+	int _positionX = 0;
+	int _positionY = 0;
+	Figure* _figure = nullptr;
 };

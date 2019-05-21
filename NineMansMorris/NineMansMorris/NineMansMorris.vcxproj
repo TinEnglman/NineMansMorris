@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="BoardFactory.cpp" />
+    <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CellData.cpp" />
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="Font.cpp" />
@@ -36,6 +37,7 @@
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="BoardFactory.h" />
+    <ClInclude Include="Cell.h" />
     <ClInclude Include="CellData.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="Font.h" />

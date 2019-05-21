@@ -44,3 +44,9 @@ void ImageBox::Draw()
 		std::cerr << "Failed to display ImageBox. \n";
 	}
 }
+
+void ImageBox::SetPosition(int x, int y)
+{
+	_x = x;
+	_y = y;
+}

@@ -8,8 +8,8 @@ Board* BoardFactory::CreateBoard()
 	
 	for (int i = 0; i < NUM_SLOTS; i++)
 	{
-		Slot *slot = new Slot();
-		board->AddSlot(slot);
+		//Slot *slot = new Slot();
+		//board->AddSlot(slot);
 	}
 
 	return board;

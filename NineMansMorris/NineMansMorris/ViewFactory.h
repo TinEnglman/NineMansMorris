@@ -4,7 +4,6 @@
 
 #include "ImageBox.h"
 #include "TextBox.h"
-#include "SceneManager.h"
 #include "Font.h"
 
 class ViewFactory
@@ -17,5 +16,5 @@ public:
 private:
 	Window* _window = nullptr;
 	Renderer* _renderer = nullptr;
-	Font* _font;
+	Font* _font = nullptr;
 };
