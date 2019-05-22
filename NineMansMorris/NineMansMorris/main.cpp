@@ -7,6 +7,7 @@
 #include "ViewFactory.h"
 #include "EventController.h"
 #include "GameController.h"
+#include "BoardFactory.h"
 
 
 int main(int argc, char **argv)
@@ -26,11 +27,17 @@ int main(int argc, char **argv)
 	Font* font = new Font("arial.ttf");
 	ViewFactory* viewFactory = new ViewFactory(window, renderer, font);
 	SceneManager* sceneManager = new SceneManager(viewFactory);
-	
+
 	sceneManager->SetupBackground();
 	sceneManager->SetupGUI();
 	sceneManager->SetupInitialSlots();
 	sceneManager->SetupBoardSlots();
+	
+	BoardFactory* boardFactory = new BoardFactory();
+	Board *board = boardFactory->CreateBoard();
+
+	GameController* gameController = new GameController(board, mouseController, sceneManager);
+	gameController->Setup();
 
 	while (!window->IsClosed())
 	{

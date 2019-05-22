@@ -11,6 +11,7 @@ public:
 
 	void AddCell(Cell* cell);
 	Cell* GetCell(int index);
+	int GetNumCells();
 
 private:
 	std::vector<Cell*> _cells;

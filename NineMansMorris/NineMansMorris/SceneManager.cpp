@@ -1,4 +1,5 @@
 #include <array>
+#include <iostream>
 
 #include "SceneManager.h"
 #include "ImageBox.h"
@@ -9,13 +10,46 @@ SceneManager::SceneManager(ViewFactory* viewFactory) :
 {
 }
 
+void SceneManager::Draw()
+{
+	for (unsigned int i = 0; i < _viewBoxes.size(); i++)
+	{
+		_viewBoxes[i]->Draw();
+	}
+}
+
+void SceneManager::AddViewBox(ViewBox* viewBox)
+{
+	_viewBoxes.push_back(viewBox);
+}
+
+Slot* SceneManager::GetInitialSlot(int index)
+{
+	if (index < 0 || index >= _initialSlots.size())
+	{
+		std::cerr << "Initial slot index out of range. \n";
+	}
+
+	return _initialSlots[index];
+}
+
+Slot* SceneManager::GetBoardSlot(int index)
+{
+	if (index < 0 || index >= _boardSlots.size())
+	{
+		std::cerr << "Initial slot index out of range. \n";
+	}
+
+	return _boardSlots[index];
+}
+
 void SceneManager::SetupInitialSlots()
 {
 	const int NUM_FIGURES = 9;
 	const int NUM_ROWS = 3;
 	const int SEPARATION_X = 60;
 	const int SEPARATION_Y = 60;
-	
+
 	for (int i = 0; i < NUM_FIGURES / NUM_ROWS; i++)
 	{
 		for (int j = 0; j < NUM_FIGURES / NUM_ROWS; j++)
@@ -50,7 +84,7 @@ void SceneManager::SetupBoardSlots()
 	};
 	std::array<int, NUM_SLOTS> slotPositionsY
 	{
-		330, 330, 330, 
+		330, 330, 330,
 		424, 424, 424,
 		520, 520, 520,
 		614, 614, 614, 614, 614, 614,
@@ -58,13 +92,12 @@ void SceneManager::SetupBoardSlots()
 		800, 800, 800,
 		898, 898, 898
 	};
-	
+
 	for (int i = 0; i < NUM_SLOTS; i++)
 	{
 		CreateBoardSlot(slotPositionsX[i], slotPositionsY[i]);
 	}
 }
-
 
 void SceneManager::SetupBackground()
 {
@@ -86,19 +119,6 @@ void SceneManager::SetupGUI()
 	AddViewBox((ViewBox*)playerLabel2);
 }
 
-void SceneManager::Draw()
-{
-	for (unsigned int i = 0; i < _viewBoxes.size(); i++)
-	{
-		_viewBoxes[i]->Draw();
-	}
-}
-
-void SceneManager::AddViewBox(ViewBox* viewBox)
-{
-	_viewBoxes.push_back(viewBox);
-}
-
 Figure* SceneManager::CreateWhiteFigure()
 {
 	auto whitePiece = _viewFactory->CreateImageBox(0, 0, 48, 48, "white_figure.png");
@@ -109,7 +129,6 @@ Figure* SceneManager::CreateWhiteFigure()
 
 	return figure;
 }
-
 
 Figure* SceneManager::CreateBlackFigure()
 {
@@ -127,7 +146,7 @@ void SceneManager::CreateInitialSlot(int x, int y, Figure* figure)
 	Slot* slot = new Slot(x, y);
 	slot->SetFigure(figure);
 	slot->UpdateFigurePosition();
-	_initalSlots.push_back(slot);
+	_initialSlots.push_back(slot);
 }
 
 

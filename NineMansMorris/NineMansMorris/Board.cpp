@@ -20,3 +20,8 @@ Cell* Board::GetCell(int index)
 	}
 	return _cells[index];
 }
+
+int Board::GetNumCells()
+{
+	return _cells.size();
+}

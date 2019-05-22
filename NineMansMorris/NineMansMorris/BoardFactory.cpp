@@ -23,16 +23,13 @@ Board* BoardFactory::CreateBoard()
 		board->AddCell(cell);
 	}
 
-	for (int i = 0; i < NUM_SLOTS; i++)
+	for (int i = 0; i < _cellData->_cellData.size(); i++)
 	{
 		Cell* cell = board->GetCell(i);
-		for (std::vector<int> neighbours : _cellData->_cellData)
+		for (int index : _cellData->_cellData[i])
 		{
-			for (int index : neighbours)
-			{
-				Cell* neighbourCell = board->GetCell(index);
-				cell->AddNeighbour(neighbourCell);
-			}
+			Cell* neighbourCell = board->GetCell(index);
+			cell->AddNeighbour(neighbourCell);
 		}
 	}
 

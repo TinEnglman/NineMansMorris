@@ -11,13 +11,14 @@ class SceneManager
 public:
 	SceneManager(ViewFactory* viewFactory);
 	void Draw();
+	void AddViewBox(ViewBox* viewBox);
+	Slot* GetInitialSlot(int index);
+	Slot* GetBoardSlot(int index);
+
 	void SetupInitialSlots();
 	void SetupBackground();
 	void SetupGUI();
 	void SetupBoardSlots();
-	
-	void AddViewBox(ViewBox* viewBox);
-
 
 private:
 	Figure* CreateWhiteFigure();
@@ -26,7 +27,7 @@ private:
 	void CreateBoardSlot(int x, int y);
 
 	std::vector<ViewBox*> _viewBoxes;
-	std::vector<Slot*> _initalSlots;
+	std::vector<Slot*> _initialSlots;
 	std::vector<Slot*> _boardSlots;
 	ViewFactory* _viewFactory = nullptr;
 };

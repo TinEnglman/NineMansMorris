@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Board.h"
+#include "CellData.h"
 
 class BoardFactory
 {
+public:
 	BoardFactory();
 	~BoardFactory();
 
-public:
 	Board* CreateBoard();
 
 private:
