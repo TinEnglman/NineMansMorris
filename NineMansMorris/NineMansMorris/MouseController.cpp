@@ -1,7 +1,6 @@
 #include "MouseController.h"
 
-MouseController::MouseController(int intialMouseX, int initialMouseY) :
-	_mouseX(intialMouseX), _mouseY(initialMouseY)
+MouseController::MouseController()
 {
 }
 

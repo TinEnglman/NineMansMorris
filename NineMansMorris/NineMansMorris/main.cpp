@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 	renderer->Init(window->GetWindow());
 	window->SetRenderer(renderer);
 
-	MouseController* mouseController = new MouseController(0, 0);
+	MouseController* mouseController = new MouseController();
 	EventController* eventController = new EventController(window, mouseController);
 	
 	Font* font = new Font("arial.ttf");

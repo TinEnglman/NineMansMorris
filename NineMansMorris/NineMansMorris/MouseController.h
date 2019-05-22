@@ -5,7 +5,7 @@
 class MouseController
 {
 public:
-	MouseController(int initialMouseX, int initialMouseY);
+	MouseController();
 	void UpdateMotion(SDL_MouseMotionEvent* motionEvent);
 	void ButtonUp(SDL_MouseButtonEvent* buttonEvent);
 	void ButtonDown(SDL_MouseButtonEvent* buttonEvent);
@@ -16,6 +16,6 @@ public:
 
 private:
 	bool _mouseDown = false;
-	int _mouseX;
-	int _mouseY;
+	int _mouseX = 0;
+	int _mouseY = 0;
 };

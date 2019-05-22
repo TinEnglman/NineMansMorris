@@ -1,7 +1,7 @@
 #include <array>
+
 #include "SceneManager.h"
 #include "ImageBox.h"
-
 
 
 SceneManager::SceneManager(ViewFactory* viewFactory) :

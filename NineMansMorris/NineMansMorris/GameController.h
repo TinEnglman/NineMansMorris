@@ -2,6 +2,7 @@
 
 #include "Board.h"
 #include "MouseController.h"
+#include "Slot.h"
 
 class GameController
 {
