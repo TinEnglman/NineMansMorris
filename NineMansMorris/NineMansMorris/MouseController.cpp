@@ -26,11 +26,6 @@ void MouseController::UpdateMotion(SDL_MouseMotionEvent* motionEvent)
 	_mouseY = motionEvent->y;
 }
 
-bool MouseController::IsPointerPressed()
-{
-	return _mouseDown;
-}
-
 int MouseController::GetMousePositionX()
 {
 	return _mouseX;

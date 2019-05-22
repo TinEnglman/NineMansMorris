@@ -13,6 +13,11 @@ public:
 
 	virtual void Draw();
 	void SetPosition(int x, int y);
+	void SetSize(int w, int h);
+	int GetPostionX();
+	int GetPostionY();
+	int GetSizeW();
+	int GetSizeH();
 
 private:
 	SDL_Texture* _texture = nullptr;

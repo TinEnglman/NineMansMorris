@@ -10,7 +10,7 @@ public:
 	void ButtonUp(SDL_MouseButtonEvent* buttonEvent);
 	void ButtonDown(SDL_MouseButtonEvent* buttonEvent);
 
-	bool IsPointerPressed();
+	inline bool IsPointerPressed() { return _mouseDown; }
 	int GetMousePositionX();
 	int GetMousePositionY();
 

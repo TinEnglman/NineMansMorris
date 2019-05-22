@@ -42,6 +42,7 @@ int main(int argc, char **argv)
 	while (!window->IsClosed())
 	{
 		eventController->PollEvents();
+		gameController->Update();
 		window->Clear();
 		sceneManager->Draw();
 		window->Present();

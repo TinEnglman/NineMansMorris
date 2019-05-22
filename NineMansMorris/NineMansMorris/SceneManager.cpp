@@ -43,6 +43,16 @@ Slot* SceneManager::GetBoardSlot(int index)
 	return _boardSlots[index];
 }
 
+int SceneManager::GetNumInitialSlots()
+{
+	return _initialSlots.size();
+}
+
+int SceneManager::GetNumBoardlSlots()
+{
+	return _boardSlots.size();
+}
+
 void SceneManager::SetupInitialSlots()
 {
 	const int NUM_FIGURES = 9;

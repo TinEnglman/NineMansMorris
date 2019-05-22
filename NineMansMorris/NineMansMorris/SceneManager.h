@@ -14,7 +14,9 @@ public:
 	void AddViewBox(ViewBox* viewBox);
 	Slot* GetInitialSlot(int index);
 	Slot* GetBoardSlot(int index);
-
+	int GetNumInitialSlots();
+	int GetNumBoardlSlots();
+	
 	void SetupInitialSlots();
 	void SetupBackground();
 	void SetupGUI();

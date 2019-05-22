@@ -27,3 +27,12 @@ void Slot::UpdateFigurePosition()
 {
 	_figure->MoveTo(_positionX, _positionY);
 }
+
+bool Slot::IsPointInRect(int x, int y)
+{
+	if (x >= _positionX && x < (_positionX + _width) && y >= _positionY && y < (_positionY + _height))
+	{
+		return true;
+	}
+	return false;
+}
