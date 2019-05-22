@@ -61,8 +61,7 @@ void SceneManager::SetupBoardSlots()
 	
 	for (int i = 0; i < NUM_SLOTS; i++)
 	{
-		Figure* figure = CreateWhiteFigure();
-		CreateInitialSlot(slotPositionsX[i], slotPositionsY[i], figure);
+		CreateBoardSlot(slotPositionsX[i], slotPositionsY[i]);
 	}
 }
 
@@ -129,4 +128,11 @@ void SceneManager::CreateInitialSlot(int x, int y, Figure* figure)
 	slot->SetFigure(figure);
 	slot->UpdateFigurePosition();
 	_initalSlots.push_back(slot);
+}
+
+
+void SceneManager::CreateBoardSlot(int x, int y)
+{
+	Slot* slot = new Slot(x, y);
+	_boardSlots.push_back(slot);
 }

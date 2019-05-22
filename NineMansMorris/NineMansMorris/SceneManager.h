@@ -23,8 +23,10 @@ private:
 	Figure* CreateWhiteFigure();
 	Figure* CreateBlackFigure();
 	void CreateInitialSlot(int x, int y, Figure* figure);
+	void CreateBoardSlot(int x, int y);
 
 	std::vector<ViewBox*> _viewBoxes;
 	std::vector<Slot*> _initalSlots;
+	std::vector<Slot*> _boardSlots;
 	ViewFactory* _viewFactory = nullptr;
 };

@@ -5,6 +5,9 @@
 #include "ImageBox.h"
 #include "SceneManager.h"
 #include "ViewFactory.h"
+#include "EventController.h"
+#include "GameController.h"
+
 
 int main(int argc, char **argv)
 {
@@ -17,6 +20,9 @@ int main(int argc, char **argv)
 	renderer->Init(window->GetWindow());
 	window->SetRenderer(renderer);
 
+	MouseController* mouseController = new MouseController(0, 0);
+	EventController* eventController = new EventController(window, mouseController);
+	
 	Font* font = new Font("arial.ttf");
 	ViewFactory* viewFactory = new ViewFactory(window, renderer, font);
 	SceneManager* sceneManager = new SceneManager(viewFactory);
@@ -28,7 +34,7 @@ int main(int argc, char **argv)
 
 	while (!window->IsClosed())
 	{
-		window->PollEvents();
+		eventController->PollEvents();
 		window->Clear();
 		sceneManager->Draw();
 		window->Present();

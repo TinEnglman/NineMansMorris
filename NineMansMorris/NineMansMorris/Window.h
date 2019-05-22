@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <SDL.h>
 #include <SDL_image.h>
 
 #include "Renderer.h"
@@ -16,11 +15,11 @@ public:
 	
 	inline bool IsClosed() const { return _closed; };
 	bool Init(); 
-	void PollEvents();
 	void Clear() const;
 	void Present() const;
 	SDL_Window* GetWindow();
 	void SetRenderer(Renderer* renderer);
+	void Close();
 
 private:
 	std::string _title;
