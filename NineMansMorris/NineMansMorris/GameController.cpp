@@ -20,86 +20,90 @@ void GameController::Setup()
 		Slot* initialSlot = _sceneManager->GetInitialSlot(i);
 		_slots.push_back(initialSlot);
 	}
+
+	std::function< void() > pressedCallback = std::bind(&GameController::OnPointerPressed, this);
+	std::function< void() > releasedCallback = std::bind(&GameController::OnPointerReleased, this);
+
+	_mouseController->SetPressedCallback(pressedCallback);
+	_mouseController->SetReleasedCallback(releasedCallback);
 }
 
 void GameController::Update()
 {
-	if (_selectedSlot == nullptr)
+	
+
+}
+
+void GameController::SelectSlot(Slot* slot)
+{
+	_selectedSlot = slot;
+	_previousSelectedSlot = _selectedSlot;
+
+	_selectedSlot->GetFigure()->Resize(54, 54);
+}
+void GameController::DeselectSlot()
+{
+	_selectedSlot->GetFigure()->Resize(48, 48);
+	_selectedSlot = nullptr;
+}
+
+void GameController::MoveFigure(Slot* sorceSlot, Slot* destinationSlot)
+{
+
+}
+
+Slot* GameController::GetSlotUnderPointer()
+{
+	int x = _mouseController->GetMousePositionX();
+	int y = _mouseController->GetMousePositionY();
+	for (Slot* slot : _slots)
 	{
-		if (_mouseController->IsPointerPressed() && _selectionCandidateSlot == nullptr)
+		if (slot->IsPointInRect(x, y))
 		{
-			int x = _mouseController->GetMousePositionX();
-			int y = _mouseController->GetMousePositionY();
+			return slot;
+		}
+	}
+	return nullptr;
+}
+
+void GameController::OnPointerPressed()
+{
+	_selectionCandidateSlot = GetSlotUnderPointer();
+}
+
+void GameController::OnPointerReleased()
+{
+	Slot* slot = GetSlotUnderPointer();
+	
+	if (slot != nullptr)
+	{
+		if (_selectedSlot != nullptr)
+		{
+			DeselectSlot();
+		}
 		
-			for (Slot* slot : _slots)
+		if (slot == _selectionCandidateSlot && slot->GetFigure() != nullptr)
+		{
+			if (_previousSelectedSlot != slot)
 			{
-				if (slot->IsPointInRect(x, y))
+				SelectSlot(slot);
+			}
+			else
+			{
+				if (_selectedSlot != nullptr)
 				{
-					_selectionCandidateSlot = slot;
-					break;
+					DeselectSlot();
 				}
 			}
 		}
-
-		if (!_mouseController->IsPointerPressed() && _selectionCandidateSlot != nullptr)
-		{
-			int x = _mouseController->GetMousePositionX();
-			int y = _mouseController->GetMousePositionY();
-
-			if (_selectionCandidateSlot->IsPointInRect(x, y))
-			{
-				_previousSelectedSlot = _selectedSlot;
-				_selectedSlot = _selectionCandidateSlot;
-				_selectionCandidateSlot = nullptr;
-			}
-		}
 	}
-
-	if (_selectedSlot != nullptr)
+	else
 	{
-		if (_mouseController->IsPointerPressed())
+		if (_selectionCandidateSlot == nullptr && _selectedSlot != nullptr)
 		{
-			int x = _mouseController->GetMousePositionX();
-			int y = _mouseController->GetMousePositionY();
-
-			for (Slot* slot : _slots)
-			{
-				if (slot->IsPointInRect(x, y))
-				{
-					_selectionCandidateSlot = slot;
-					break;
-				}
-			}
-		}
-
-		if (!_mouseController->IsPointerPressed() && _selectionCandidateSlot != nullptr)
-		{
-			int x = _mouseController->GetMousePositionX();
-			int y = _mouseController->GetMousePositionY();
-
-			if (_selectionCandidateSlot->IsPointInRect(x, y))
-			{
-				_previousSelectedSlot = _selectedSlot;
-				_selectedSlot = _selectionCandidateSlot;
-			}
-
-			if (_selectionCandidateSlot == nullptr)
-			{
-				_selectedSlot = nullptr;
-			}
-		}
-
-	}
-
-	if (_selectedSlot != nullptr)
-	{
-		if (_selectedSlot->GetFigure() != nullptr)
-		{
-			if (_previousSelectedSlot != nullptr)
-			{
-				_previousSelectedSlot->GetFigure()->Resize(48, 48);
-			}
-			_selectedSlot->GetFigure()->Resize(54, 54);
+			DeselectSlot();
 		}
 	}
+
+	_selectionCandidateSlot = nullptr;
 }

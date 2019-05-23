@@ -24,7 +24,6 @@ void EventController::PollEvents()
 			break;
 		case SDL_MOUSEMOTION:
 			_mouseController->UpdateMotion(&event.motion);
-
 		default:
 			break;
 		}

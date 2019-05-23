@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <functional>
 
 #include "Board.h"
 #include "MouseController.h"
@@ -14,6 +15,13 @@ public:
 	void Update();
 
 private:
+	void SelectSlot(Slot *slot);
+	void DeselectSlot();
+	void MoveFigure(Slot* sorceSlot, Slot* destinationSlot);
+	Slot* GetSlotUnderPointer();
+	void OnPointerPressed();
+	void OnPointerReleased();
+	
 	Board* _board = nullptr;
 	MouseController* _mouseController = nullptr;
 	SceneManager* _sceneManager = nullptr;
