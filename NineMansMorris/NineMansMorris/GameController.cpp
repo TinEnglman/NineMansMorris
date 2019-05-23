@@ -37,8 +37,6 @@ void GameController::Update()
 void GameController::SelectSlot(Slot* slot)
 {
 	_selectedSlot = slot;
-	_previousSelectedSlot = _selectedSlot;
-
 	_selectedSlot->GetFigure()->Resize(54, 54);
 }
 void GameController::DeselectSlot()
@@ -47,9 +45,12 @@ void GameController::DeselectSlot()
 	_selectedSlot = nullptr;
 }
 
-void GameController::MoveFigure(Slot* sorceSlot, Slot* destinationSlot)
+void GameController::MoveFigure(Slot* sourceSlot, Slot* destinationSlot)
 {
-
+	destinationSlot->SetFigure(sourceSlot->GetFigure());
+	sourceSlot->SetFigure(nullptr);
+	
+	destinationSlot->UpdateFigurePosition();
 }
 
 Slot* GameController::GetSlotUnderPointer()
@@ -73,28 +74,20 @@ void GameController::OnPointerPressed()
 
 void GameController::OnPointerReleased()
 {
-	Slot* slot = GetSlotUnderPointer();
+	Slot* releasedSlot = GetSlotUnderPointer();
 	
-	if (slot != nullptr)
+	if (releasedSlot != nullptr)
 	{
-		if (_selectedSlot != nullptr)
+		if (releasedSlot == _selectionCandidateSlot && releasedSlot->GetFigure() != nullptr)
 		{
-			DeselectSlot();
+			SelectSlot(releasedSlot);
 		}
-		
-		if (slot == _selectionCandidateSlot && slot->GetFigure() != nullptr)
+
+		if (releasedSlot->GetFigure() == nullptr && _selectedSlot->GetFigure() != nullptr)
 		{
-			if (_previousSelectedSlot != slot)
-			{
-				SelectSlot(slot);
-			}
-			else
-			{
-				if (_selectedSlot != nullptr)
-				{
-					DeselectSlot();
-				}
-			}
+			Slot* sourceSlot = _selectedSlot;
+			DeselectSlot();
+			MoveFigure(sourceSlot, releasedSlot);
 		}
 	}
 	else

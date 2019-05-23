@@ -26,7 +26,6 @@ private:
 	MouseController* _mouseController = nullptr;
 	SceneManager* _sceneManager = nullptr;
 	Slot* _selectedSlot = nullptr;
-	Slot* _previousSelectedSlot = nullptr;
 	Slot* _selectionCandidateSlot = nullptr;
 
 	std::map<Cell*, Slot*> _cellMap;
