@@ -136,6 +136,7 @@ Figure* SceneManager::CreateWhiteFigure()
 	
 	Figure* figure = new Figure(0);
 	figure->SetImageBox(whitePiece);
+	figure->SetOwner(Player::PLAYER1);
 
 	return figure;
 }
@@ -147,6 +148,7 @@ Figure* SceneManager::CreateBlackFigure()
 
 	Figure* figure = new Figure(1);
 	figure->SetImageBox(blackPiece);
+	figure->SetOwner(Player::PLAYER2);
 
 	return figure;
 }

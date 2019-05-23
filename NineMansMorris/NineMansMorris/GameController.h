@@ -1,4 +1,6 @@
 #pragma once
+
+#include <iostream>
 #include <map>
 #include <functional>
 
@@ -12,7 +14,6 @@ class GameController
 public:
 	GameController(Board* board, MouseController* mouseController, SceneManager* _sceneManager);
 	void Setup();
-	void Update();
 
 private:
 	void SelectSlot(Slot *slot);
@@ -21,6 +22,15 @@ private:
 	Slot* GetSlotUnderPointer();
 	void OnPointerPressed();
 	void OnPointerReleased();
+	Player GetSlotOwner(Slot* slot);
+	std::vector<Slot*> GetVerticalMatch();
+	std::vector<Slot*> GetHorizontalMatch();
+
+	void FindVerticalMatch(Slot* slot, std::vector<Slot*>* match, int dept);
+	void FindHorizontalMatch(Slot* slot, std::vector<Slot*>* match, int dept);
+
+	Slot* GetSlotFromCell(Cell* cell);
+
 	
 	Board* _board = nullptr;
 	MouseController* _mouseController = nullptr;
@@ -28,6 +38,8 @@ private:
 	Slot* _selectedSlot = nullptr;
 	Slot* _selectionCandidateSlot = nullptr;
 
-	std::map<Cell*, Slot*> _cellMap;
+	std::map<Slot*, Cell*> _cellMap;
 	std::vector<Slot*> _slots;
+
+	Player _currentPlayer = Player::PLAYER1;
 };

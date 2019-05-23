@@ -11,6 +11,8 @@ public:
 	Figure* GetFigure();
 	void UpdateFigurePosition();
 	bool IsPointInRect(int x, int y);
+	int GetPositionX();
+	int GetPositionY();
 
 private:
 	int _positionX = 0;

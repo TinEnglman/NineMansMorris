@@ -20,3 +20,13 @@ void Figure::Resize(int w, int h)
 {
 	_figureImageBox->SetSize(w, h); // todo add animator
 }
+
+Player Figure::GetOwner()
+{
+	return _owner;
+}
+
+void Figure::SetOwner(Player owner)
+{
+	_owner = owner;
+}

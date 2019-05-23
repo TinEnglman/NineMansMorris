@@ -22,7 +22,6 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="BoardFactory.cpp" />
     <ClCompile Include="Cell.cpp" />
-    <ClCompile Include="CellData.cpp" />
     <ClCompile Include="EventController.cpp" />
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="Font.cpp" />
@@ -42,6 +41,7 @@
     <ClInclude Include="BoardFactory.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CellData.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="EventController.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="Font.h" />

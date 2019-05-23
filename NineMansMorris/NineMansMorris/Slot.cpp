@@ -36,3 +36,12 @@ bool Slot::IsPointInRect(int x, int y)
 	}
 	return false;
 }
+
+int Slot::GetPositionX()
+{
+	return _positionX;
+}
+int Slot::GetPositionY()
+{
+	return _positionY;
+}
