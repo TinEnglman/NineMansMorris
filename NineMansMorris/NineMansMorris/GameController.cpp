@@ -78,16 +78,30 @@ void GameController::OnPointerReleased()
 	
 	if (releasedSlot != nullptr)
 	{
-		if (releasedSlot == _selectionCandidateSlot && releasedSlot->GetFigure() != nullptr)
+		
+		
+		if (releasedSlot == _selectedSlot && _selectedSlot != nullptr)
 		{
+			DeselectSlot();
+		}
+		else if (releasedSlot == _selectionCandidateSlot && releasedSlot->GetFigure() != nullptr)
+		{
+			if (_selectedSlot != nullptr)
+			{
+				DeselectSlot();
+			}
+
 			SelectSlot(releasedSlot);
 		}
 
-		if (releasedSlot->GetFigure() == nullptr && _selectedSlot->GetFigure() != nullptr)
+		if (_selectedSlot != nullptr)
 		{
-			Slot* sourceSlot = _selectedSlot;
-			DeselectSlot();
-			MoveFigure(sourceSlot, releasedSlot);
+			if (releasedSlot->GetFigure() == nullptr && _selectedSlot->GetFigure() != nullptr)
+			{
+				Slot* sourceSlot = _selectedSlot;
+				DeselectSlot();
+				MoveFigure(sourceSlot, releasedSlot);
+			}
 		}
 	}
 	else
