@@ -44,3 +44,32 @@ void ImageBox::Draw()
 		std::cerr << "Failed to display ImageBox. \n";
 	}
 }
+
+void ImageBox::SetPosition(int x, int y)
+{
+	_x = x;
+	_y = y;
+}
+
+void ImageBox::SetSize(int w, int h)
+{
+	_w = w;
+	_h = h;
+}
+
+int ImageBox::GetPostionX()
+{
+	return _x;
+}
+int ImageBox::GetPostionY()
+{
+	return _y;
+}
+int ImageBox::GetSizeW()
+{
+	return _w;
+}
+int ImageBox::GetSizeH()
+{
+	return _h;
+}

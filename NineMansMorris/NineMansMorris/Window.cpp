@@ -42,22 +42,6 @@ bool Window::Init() // to much responsibility, refactor
 	return true;
 }
 
-void Window::PollEvents()
-{
-	SDL_Event event;
-
-	if (SDL_PollEvent(&event))
-	{
-		switch (event.type)
-		{
-		case SDL_QUIT:
-			_closed = true;
-			break;
-		default:
-			break;
-		}
-	}
-}
 
 SDL_Window* Window::GetWindow()
 {
@@ -79,4 +63,9 @@ void Window::Clear() const
 void Window::Present() const
 {
 	SDL_RenderPresent(_renderer->GetRenderer());
+}
+
+void Window::Close()
+{
+	_closed = true;
 }

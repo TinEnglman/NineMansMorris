@@ -21,11 +21,14 @@
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="BoardFactory.cpp" />
-    <ClCompile Include="CellData.cpp" />
+    <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="EventController.cpp" />
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="GameController.cpp" />
     <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MouseController.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Slot.cpp" />
@@ -36,10 +39,15 @@
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="BoardFactory.h" />
+    <ClInclude Include="Cell.h" />
     <ClInclude Include="CellData.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="EventController.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="GameController.h" />
     <ClInclude Include="ImageBox.h" />
+    <ClInclude Include="MouseController.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Slot.h" />

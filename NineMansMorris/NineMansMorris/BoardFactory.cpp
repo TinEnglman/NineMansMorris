@@ -1,6 +1,17 @@
+#include "CellData.h"
 #include "BoardFactory.h"
 #include "Board.h"
 #include "Slot.h"
+
+BoardFactory::BoardFactory()
+{
+	_cellData = new CellData();
+}
+
+BoardFactory::~BoardFactory()
+{
+	delete[] _cellData;
+}
 
 Board* BoardFactory::CreateBoard()
 {
@@ -8,8 +19,18 @@ Board* BoardFactory::CreateBoard()
 	
 	for (int i = 0; i < NUM_SLOTS; i++)
 	{
-		Slot *slot = new Slot();
-		board->AddSlot(slot);
+		Cell* cell = new Cell();
+		board->AddCell(cell);
+	}
+
+	for (int i = 0; i < _cellData->_cellData.size(); i++)
+	{
+		Cell* cell = board->GetCell(i);
+		for (int index : _cellData->_cellData[i])
+		{
+			Cell* neighbourCell = board->GetCell(index);
+			cell->AddNeighbour(neighbourCell);
+		}
 	}
 
 	return board;

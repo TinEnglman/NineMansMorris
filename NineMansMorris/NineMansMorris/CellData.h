@@ -4,7 +4,6 @@
 
 struct CellData
 {
-private:
 	std::vector<std::vector<int>> _cellData = 
 	{
 		{1, 9}, {0, 2, 4}, {1, 14},

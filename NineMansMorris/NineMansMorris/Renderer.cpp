@@ -27,4 +27,6 @@ bool Renderer::Init(SDL_Window *window)
 		std::cerr << "Failed to create renderer.\n";
 		return false;
 	}
+	
+	return true;
 }

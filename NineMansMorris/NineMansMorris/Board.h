@@ -1,17 +1,17 @@
 #pragma once
 
 #include <vector>
-
-#include "Slot.h"
+#include "Cell.h"
 
 class Board
 {
 public:
 	Board();
-	~Board();
 
-	void AddSlot(Slot *slot);
+	void AddCell(Cell* cell);
+	Cell* GetCell(int index);
+	int GetNumCells();
 
 private:
-	std::vector<Slot*> _slots;
+	std::vector<Cell*> _cells;
 };
