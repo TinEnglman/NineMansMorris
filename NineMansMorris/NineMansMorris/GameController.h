@@ -27,6 +27,8 @@ private:
 	void HandleSelectionReleased();
 	void UpdateGameState();
 	void UpdateMatches(Player player);
+	bool HasHorizontalMatch(Player player);
+	bool HasVerticalMatch(Player player);
 	bool IsNeighbour(Slot* slot, Slot* otherSlot);
 	Player GetWinState();
 
@@ -49,7 +51,8 @@ private:
 
 	std::map<Slot*, Cell*> _cellMap;
 	std::vector<Slot*> _slots;
-	std::vector<Slot*> _activeMatches;
+	std::vector<Slot*> _activeVerticalSlots;
+	std::vector<Slot*> _activeHorizontalSlots;
 
 	Player _currentPlayer = Player::PLAYER1;
 	GamePhase _gamePhase = GamePhase::PLACING;

@@ -146,8 +146,8 @@ void GameController::HandleSelectionReleased()
 				Slot* sourceSlot = _selectedSlot;
 				DeselectSlot();
 				MoveFigure(sourceSlot, releasedSlot);
-				UpdateGameState();
 				UpdateMatches(_currentPlayer);
+				UpdateGameState();
 			}
 			else if (isRemovingPhase)
 			{
@@ -176,9 +176,8 @@ void GameController::UpdateGameState()
 	std::vector<Slot*> verticalMatch = GetVerticalMatch();
 	std::vector<Slot*> horizontalMatch = GetHorizontalMatch();
 
-	bool hasMatch = verticalMatch.size() > 2 || horizontalMatch.size() > 2;
 
-	if (!hasMatch)
+	if (_gamePhase != GamePhase::REMOVING)
 	{
 		if (_currentPlayer == Player::PLAYER1)
 		{
@@ -225,8 +224,49 @@ void GameController::UpdateMatches(Player player)
 	std::vector<Slot*> verticalMatch = GetVerticalMatch();
 	std::vector<Slot*> horizontalMatch = GetHorizontalMatch();
 	
-	bool hasMatch = verticalMatch.size() > 2 && verticalMatch[0]->GetFigure()->GetOwner() == player || horizontalMatch.size() > 2 && horizontalMatch[0]->GetFigure()->GetOwner() == player;
+	bool hasMatch = false;
 
+	if (verticalMatch.size() > 2 && verticalMatch[0]->GetFigure()->GetOwner() == player)
+	{
+		for (Slot* slot : verticalMatch)
+		{
+			bool containsSlot = false;
+			for (int i = 0; i < _activeVerticalSlots.size(); i++)
+			{
+				if (_activeVerticalSlots[i] == slot)
+				{
+					containsSlot = true;
+				}
+			}
+			if (!containsSlot)
+			{
+				_activeVerticalSlots.push_back(slot);
+				hasMatch = true;
+			}
+		}
+	}
+
+	if (horizontalMatch.size() > 2 && horizontalMatch[0]->GetFigure()->GetOwner() == player)
+	{
+		for (Slot* slot : horizontalMatch)
+		{
+			bool containsSlot = false;
+			for (int i = 0; i < _activeHorizontalSlots.size(); i++)
+			{
+				if (_activeHorizontalSlots[i] == slot)
+				{
+					containsSlot = true;
+				}
+			}
+			if (!containsSlot)
+			{
+				_activeHorizontalSlots.push_back(slot);
+				hasMatch = true;
+			}
+		}
+	}
+	
+	
 	if (hasMatch)
 	{
 		_gamePhase = GamePhase::REMOVING;
