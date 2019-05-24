@@ -133,7 +133,6 @@ void SceneManager::SetupGUI()
 	playerLabel2->SetColor(255, 255, 0);
 	AddViewBox((ViewBox*)playerLabel2);
 
-	
 	auto turnLabel = _viewFactory->CreateTextBox(340, 15, 400, 100, "TURN");
 	turnLabel->SetColor(225, 155, 0);
 	AddViewBox((ViewBox*)turnLabel);

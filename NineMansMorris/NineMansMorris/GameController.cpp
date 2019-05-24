@@ -103,7 +103,10 @@ void GameController::HandleSelectionPressed()
 		Figure* figure = _selectionCandidateSlot->GetFigure();
 		if (figure != nullptr)
 		{
-			if (figure->GetOwner() != _currentPlayer)
+			bool isOppositePlayer = figure->GetOwner() != _currentPlayer;
+			bool isSelectionOnBoard = _gamePhase == GamePhase::PLACING;
+			bool isPlacingPhase = _cellMap.find(_selectionCandidateSlot) != _cellMap.end();
+			if (isOppositePlayer || isPlacingPhase && isSelectionOnBoard)
 			{
 				_selectionCandidateSlot = nullptr;
 			}
@@ -133,7 +136,12 @@ void GameController::HandleSelectionReleased()
 
 		if (_selectedSlot != nullptr)
 		{
-			if (releasedSlot->GetFigure() == nullptr && _selectedSlot->GetFigure() != nullptr)
+			bool isTargerSlotEmpty = releasedSlot->GetFigure() == nullptr;
+			bool isSelectedSlotFull = _selectedSlot->GetFigure() != nullptr;
+			bool isTargetSlotOnGrid = _cellMap.find(releasedSlot) != _cellMap.end();
+			bool isPlacingPhase = _gamePhase == GamePhase::PLACING;
+
+			if (isTargerSlotEmpty && isSelectedSlotFull && isTargetSlotOnGrid && isPlacingPhase)
 			{
 				Slot* sourceSlot = _selectedSlot;
 				DeselectSlot();
