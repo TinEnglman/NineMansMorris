@@ -6,3 +6,11 @@ enum class Player
 	PLAYER1,
 	PLAYER2,
 };
+
+enum class GamePhase
+{
+	PLACING,
+	MOVING,
+	FLYING,
+	REMOVING,
+};

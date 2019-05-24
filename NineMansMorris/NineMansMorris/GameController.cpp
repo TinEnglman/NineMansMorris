@@ -59,6 +59,13 @@ void GameController::MoveFigure(Slot* sourceSlot, Slot* destinationSlot)
 
 }
 
+void GameController::RemoveFigure(Slot* sourceSlot)
+{
+	Figure* targetFigure = sourceSlot->GetFigure();
+	delete targetFigure;
+	sourceSlot->SetFigure(nullptr);
+}
+
 Slot* GameController::GetSlotUnderPointer()
 {
 	int x = _mouseController->GetMousePositionX();
@@ -75,6 +82,16 @@ Slot* GameController::GetSlotUnderPointer()
 
 void GameController::OnPointerPressed()
 {
+	HandleSelectionPressed();
+}
+
+void GameController::OnPointerReleased()
+{
+	HandleSelectionReleased();
+}
+
+void GameController::HandleSelectionPressed()
+{
 	_selectionCandidateSlot = GetSlotUnderPointer();
 
 	if (_selectionCandidateSlot != nullptr)
@@ -82,7 +99,11 @@ void GameController::OnPointerPressed()
 		Figure* figure = _selectionCandidateSlot->GetFigure();
 		if (figure != nullptr)
 		{
-			if (figure->GetOwner() != _currentPlayer)
+			bool isOppositePlayer = figure->GetOwner() != _currentPlayer;
+			bool isPlacingPhase = _gamePhase == GamePhase::PLACING;
+			bool isRemovingPhase = _gamePhase == GamePhase::REMOVING;
+			bool isSelectionOnBoard = _cellMap.find(_selectionCandidateSlot) != _cellMap.end();
+			if (isOppositePlayer && !isRemovingPhase || isPlacingPhase && isSelectionOnBoard)
 			{
 				_selectionCandidateSlot = nullptr;
 			}
@@ -90,10 +111,10 @@ void GameController::OnPointerPressed()
 	}
 }
 
-void GameController::OnPointerReleased()
+void GameController::HandleSelectionReleased()
 {
 	Slot* releasedSlot = GetSlotUnderPointer();
-	
+
 	if (releasedSlot != nullptr)
 	{
 		if (releasedSlot == _selectedSlot && _selectedSlot != nullptr)
@@ -112,11 +133,30 @@ void GameController::OnPointerReleased()
 
 		if (_selectedSlot != nullptr)
 		{
-			if (releasedSlot->GetFigure() == nullptr && _selectedSlot->GetFigure() != nullptr)
+			bool isTargerSlotEmpty = releasedSlot->GetFigure() == nullptr;
+			bool isSelectedSlotFull = _selectedSlot->GetFigure() != nullptr;
+			bool isTargetSlotOnGrid = _cellMap.find(releasedSlot) != _cellMap.end();
+			bool isPlacingPhase = _gamePhase == GamePhase::PLACING;
+			bool isMovingPhase = _gamePhase == GamePhase::MOVING;
+			bool isRemovingPhase = _gamePhase == GamePhase::REMOVING;
+			bool isTargetNeighbour = IsNeighbour(_selectedSlot, releasedSlot);
+				
+			if (isTargerSlotEmpty && isSelectedSlotFull && isTargetSlotOnGrid && (isPlacingPhase || isMovingPhase && isTargetNeighbour))
 			{
 				Slot* sourceSlot = _selectedSlot;
 				DeselectSlot();
 				MoveFigure(sourceSlot, releasedSlot);
+				UpdateMatches(_currentPlayer);
+				UpdateGameState();
+			}
+			else if (isRemovingPhase)
+			{
+				_sceneManager->RemoveViewBox((ViewBox*)releasedSlot->GetFigure()->GetImageBox());
+				RemoveFigure(releasedSlot);
+				_gamePhase = _previousGamePhase;
+				_sceneManager->SetPhaseLabelText(_previousPhaseLabelText);
+				UpdateGameState();
+				_selectedSlot = nullptr;
 			}
 		}
 	}
@@ -129,17 +169,127 @@ void GameController::OnPointerReleased()
 	}
 
 	_selectionCandidateSlot = nullptr;
+}
 
+void GameController::UpdateGameState()
+{
 	std::vector<Slot*> verticalMatch = GetVerticalMatch();
 	std::vector<Slot*> horizontalMatch = GetHorizontalMatch();
 
-	if (verticalMatch.size() > 0)
+
+	if (_gamePhase != GamePhase::REMOVING)
 	{
+		if (_currentPlayer == Player::PLAYER1)
+		{
+			_currentPlayer = Player::PLAYER2;
+			_sceneManager->SetPlayerLabelText("PLAYER 2");
+		}
+		else
+		{
+			_currentPlayer = Player::PLAYER1;
+			_sceneManager->SetPlayerLabelText("PLAYER 1");
+		}
+	}
+	
+	if (_gamePhase == GamePhase::PLACING)
+	{
+		if (IsInitialSlotsEmpty())
+		{
+			_previousGamePhase = _gamePhase;
+			_previousPhaseLabelText = _sceneManager->GetPhaseLabelText();
+			_gamePhase = GamePhase::MOVING;
+			_sceneManager->SetPhaseLabelText("MOVING");
+		}
 	}
 
-	if (horizontalMatch.size() > 0)
+	Player winState = GetWinState();
+	if (winState != Player::NONE)
 	{
+		if (winState == Player::PLAYER1)
+		{
+			_sceneManager->SetTitleLabelText("PLAYER 1");
+			_sceneManager->SetPhaseLabelText("WINNER");
+		}
+		
+		if (winState == Player::PLAYER2)
+		{
+			_sceneManager->SetTitleLabelText("PLAYER 2");
+			_sceneManager->SetPhaseLabelText("WINNER");
+		}
 	}
+}
+
+void GameController::UpdateMatches(Player player)
+{
+	std::vector<Slot*> verticalMatch = GetVerticalMatch();
+	std::vector<Slot*> horizontalMatch = GetHorizontalMatch();
+	
+	bool hasMatch = false;
+
+	if (verticalMatch.size() > 2 && verticalMatch[0]->GetFigure()->GetOwner() == player)
+	{
+		for (Slot* slot : verticalMatch)
+		{
+			bool containsSlot = false;
+			for (int i = 0; i < _activeVerticalSlots.size(); i++)
+			{
+				if (_activeVerticalSlots[i] == slot)
+				{
+					containsSlot = true;
+				}
+			}
+			if (!containsSlot)
+			{
+				_activeVerticalSlots.push_back(slot);
+				hasMatch = true;
+			}
+		}
+	}
+
+	if (horizontalMatch.size() > 2 && horizontalMatch[0]->GetFigure()->GetOwner() == player)
+	{
+		for (Slot* slot : horizontalMatch)
+		{
+			bool containsSlot = false;
+			for (int i = 0; i < _activeHorizontalSlots.size(); i++)
+			{
+				if (_activeHorizontalSlots[i] == slot)
+				{
+					containsSlot = true;
+				}
+			}
+			if (!containsSlot)
+			{
+				_activeHorizontalSlots.push_back(slot);
+				hasMatch = true;
+			}
+		}
+	}
+	
+	
+	if (hasMatch)
+	{
+		_gamePhase = GamePhase::REMOVING;
+		_sceneManager->SetPhaseLabelText("REMOVING");
+	}
+}
+
+bool GameController::IsNeighbour(Slot* slot, Slot* otherSlot)
+{
+	if (_cellMap.find(slot) == _cellMap.end())
+	{
+		return false;
+	}
+	
+	bool isNeighbour = false;
+	for (Cell* cell : _cellMap[slot]->GetNeighbours())
+	{
+		if (GetSlotFromCell(cell) == otherSlot)
+		{
+			return true;
+		}
+	}
+	return isNeighbour;
 }
 
 Player GameController::GetSlotOwner(Slot* slot)
@@ -254,4 +404,58 @@ Slot* GameController::GetSlotFromCell(Cell* cell)
 
 	std::cerr << "No matching slot found for cell. \n";
 	return nullptr;
+}
+
+bool GameController::IsInitialSlotsEmpty()
+{
+	bool isEmpty = true;
+	for (Slot* slot : _slots)
+	{
+		if (_cellMap.find(slot) == _cellMap.end())
+		{
+			if (slot->GetFigure() != nullptr)
+			{
+				return false;
+			}
+		}
+	}
+	
+	return isEmpty;
+}
+
+Player GameController::GetWinState()
+{
+	Player winState = Player::NONE;
+	
+	int numPlayer1Figures = 0;
+	int numPlayer2Figures = 0;
+	for (Slot* slot : _slots)
+	{
+		if (_cellMap.find(slot) != _cellMap.end())
+		{
+			if (slot->GetFigure() != nullptr)
+			{
+				if (slot->GetFigure()->GetOwner() == Player::PLAYER1)
+				{
+					numPlayer1Figures++;
+				}
+
+				if (slot->GetFigure()->GetOwner() == Player::PLAYER2)
+				{
+					numPlayer2Figures++;
+				}
+			}
+		}
+	}
+
+	if (numPlayer1Figures < 3 &&  _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
+	{
+		winState = Player::PLAYER2;
+	}
+	else if (numPlayer2Figures < 3 && _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
+	{
+		winState = Player::PLAYER1;
+	}
+	
+	return winState;
 }

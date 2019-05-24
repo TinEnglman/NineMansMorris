@@ -42,3 +42,12 @@ void TextBox::Refresh()
 	SDL_QueryTexture(_texture, nullptr, nullptr, &_w, &_h);
 	SDL_FreeSurface(surface);
 }
+void TextBox::SetText(std::string text)
+{
+	_text = text;
+	Refresh();
+}
+std::string TextBox::GetText()
+{
+	return _text;
+}

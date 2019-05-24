@@ -22,6 +22,19 @@ void SceneManager::AddViewBox(ViewBox* viewBox)
 {
 	_viewBoxes.push_back(viewBox);
 }
+void SceneManager::RemoveViewBox(ViewBox* viewBox)
+{
+	int index = 0;
+	for (int i = 0; i < _viewBoxes.size(); i++)
+	{
+		if (_viewBoxes[i] == viewBox)
+		{
+			index = i;
+			break;
+		}
+	}
+	_viewBoxes.erase(_viewBoxes.begin() + index);
+}
 
 Slot* SceneManager::GetInitialSlot(int index)
 {
@@ -109,6 +122,31 @@ void SceneManager::SetupBoardSlots()
 	}
 }
 
+void SceneManager::SetPlayerLabelText(std::string text)
+{
+	_currentPlayerLabel->SetText(text);
+}
+
+void SceneManager::SetPhaseLabelText(std::string text)
+{
+	_currentPhaseLabel->SetText(text);
+}
+
+std::string SceneManager::GetPhaseLabelText()
+{
+	return _currentPhaseLabel->GetText();
+}
+
+void SceneManager::SetTurnLabelText(std::string text)
+{
+	_turnLabel->SetText(text);
+}
+
+void SceneManager::SetTitleLabelText(std::string text)
+{
+	_titleLabel->SetText(text);
+}
+
 void SceneManager::SetupBackground()
 {
 	auto background = _viewFactory->CreateImageBox(0, 256, 768, 768, "background.png");
@@ -127,6 +165,22 @@ void SceneManager::SetupGUI()
 	auto playerLabel2 = _viewFactory->CreateTextBox(564, 10, 400, 100, "PLAYER 2");
 	playerLabel2->SetColor(255, 255, 0);
 	AddViewBox((ViewBox*)playerLabel2);
+
+	_turnLabel = _viewFactory->CreateTextBox(340, 15, 400, 100, "TURN");
+	_turnLabel->SetColor(225, 155, 0);
+	AddViewBox((ViewBox*)_turnLabel);
+
+	_currentPlayerLabel = _viewFactory->CreateTextBox(300, 65, 400, 100, "PLAYER 1");
+	_currentPlayerLabel->SetColor(255, 255, 0);
+	AddViewBox((ViewBox*)_currentPlayerLabel);
+
+	_titleLabel = _viewFactory->CreateTextBox(340, 140, 400, 100, "PHASE");
+	_titleLabel->SetColor(225, 155, 0);
+	AddViewBox((ViewBox*)_titleLabel);
+
+	_currentPhaseLabel = _viewFactory->CreateTextBox(310, 190, 400, 100, "PLACING");
+	_currentPhaseLabel->SetColor(255, 255, 0);
+	AddViewBox((ViewBox*)_currentPhaseLabel);
 }
 
 Figure* SceneManager::CreateWhiteFigure()

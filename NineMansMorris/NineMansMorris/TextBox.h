@@ -12,6 +12,8 @@ public:
 	TextBox(Window *window, Renderer* renderer, int x, int y, int w, int h, const std::string &text, Font* font);
 	virtual void Draw();
 	void SetColor(int red, int green, int blue);
+	void SetText(std::string text);
+	std::string GetText();
 
 private:
 
@@ -21,5 +23,4 @@ private:
 	Font* _font;
 	SDL_Texture* _texture = nullptr;
 	SDL_Color _textColor = {255, 255, 255, 255};
-
 };
