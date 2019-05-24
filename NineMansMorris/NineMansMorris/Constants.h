@@ -11,5 +11,6 @@ enum class GamePhase
 {
 	PLACING,
 	MOVING,
-	FLYING
+	FLYING,
+	REMOVING,
 };

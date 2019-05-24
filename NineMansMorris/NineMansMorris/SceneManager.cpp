@@ -22,6 +22,19 @@ void SceneManager::AddViewBox(ViewBox* viewBox)
 {
 	_viewBoxes.push_back(viewBox);
 }
+void SceneManager::RemoveViewBox(ViewBox* viewBox)
+{
+	int index = 0;
+	for (int i = 0; i < _viewBoxes.size(); i++)
+	{
+		if (_viewBoxes[i] == viewBox)
+		{
+			index = i;
+			break;
+		}
+	}
+	_viewBoxes.erase(_viewBoxes.begin() + index);
+}
 
 Slot* SceneManager::GetInitialSlot(int index)
 {
@@ -117,6 +130,11 @@ void SceneManager::SetPlayerLabelText(std::string text)
 void SceneManager::SetPhaseLabelText(std::string text)
 {
 	_currentPhaseLabel->SetText(text);
+}
+
+std::string SceneManager::GetPhaseLabelText()
+{
+	return _currentPhaseLabel->GetText();
 }
 
 void SceneManager::SetTurnLabelText(std::string text)

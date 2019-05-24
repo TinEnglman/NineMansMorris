@@ -3,12 +3,21 @@
 Figure::Figure(int playerIndex) : 
 	_playerIndex(playerIndex)
 {
-	
+}
+
+Figure::~Figure()
+{
+	delete _figureImageBox;
 }
 
 void Figure::SetImageBox(ImageBox* imageBox)
 {
 	_figureImageBox = imageBox;
+}
+
+ImageBox* Figure::GetImageBox()
+{
+	return _figureImageBox;
 }
 
 void Figure::MoveTo(int x, int y)

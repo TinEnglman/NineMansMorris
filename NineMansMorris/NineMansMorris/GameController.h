@@ -19,12 +19,14 @@ private:
 	void SelectSlot(Slot *slot);
 	void DeselectSlot();
 	void MoveFigure(Slot* sorceSlot, Slot* destinationSlot);
+	void RemoveFigure(Slot* slot);
 	Slot* GetSlotUnderPointer();
 	void OnPointerPressed();
 	void OnPointerReleased();
 	void HandleSelectionPressed();
 	void HandleSelectionReleased();
 	void UpdateGameState();
+	void UpdateMatches(Player player);
 	bool IsNeighbour(Slot* slot, Slot* otherSlot);
 	Player GetWinState();
 
@@ -47,7 +49,10 @@ private:
 
 	std::map<Slot*, Cell*> _cellMap;
 	std::vector<Slot*> _slots;
+	std::vector<Slot*> _activeMatches;
 
 	Player _currentPlayer = Player::PLAYER1;
 	GamePhase _gamePhase = GamePhase::PLACING;
+	GamePhase _previousGamePhase = GamePhase::PLACING;
+	std::string _previousPhaseLabelText = "PLACING";
 };

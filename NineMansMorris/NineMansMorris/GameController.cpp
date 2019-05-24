@@ -59,6 +59,13 @@ void GameController::MoveFigure(Slot* sourceSlot, Slot* destinationSlot)
 
 }
 
+void GameController::RemoveFigure(Slot* sourceSlot)
+{
+	Figure* targetFigure = sourceSlot->GetFigure();
+	delete targetFigure;
+	sourceSlot->SetFigure(nullptr);
+}
+
 Slot* GameController::GetSlotUnderPointer()
 {
 	int x = _mouseController->GetMousePositionX();
@@ -81,17 +88,6 @@ void GameController::OnPointerPressed()
 void GameController::OnPointerReleased()
 {
 	HandleSelectionReleased();
-
-	std::vector<Slot*> verticalMatch = GetVerticalMatch();
-	std::vector<Slot*> horizontalMatch = GetHorizontalMatch();
-
-	if (verticalMatch.size() > 0)
-	{
-	}
-
-	if (horizontalMatch.size() > 0)
-	{
-	}
 }
 
 void GameController::HandleSelectionPressed()
@@ -104,9 +100,10 @@ void GameController::HandleSelectionPressed()
 		if (figure != nullptr)
 		{
 			bool isOppositePlayer = figure->GetOwner() != _currentPlayer;
-			bool isSelectionOnBoard = _gamePhase == GamePhase::PLACING;
-			bool isPlacingPhase = _cellMap.find(_selectionCandidateSlot) != _cellMap.end();
-			if (isOppositePlayer || isPlacingPhase && isSelectionOnBoard)
+			bool isPlacingPhase = _gamePhase == GamePhase::PLACING;
+			bool isRemovingPhase = _gamePhase == GamePhase::REMOVING;
+			bool isSelectionOnBoard = _cellMap.find(_selectionCandidateSlot) != _cellMap.end();
+			if (isOppositePlayer && !isRemovingPhase || isPlacingPhase && isSelectionOnBoard)
 			{
 				_selectionCandidateSlot = nullptr;
 			}
@@ -141,6 +138,7 @@ void GameController::HandleSelectionReleased()
 			bool isTargetSlotOnGrid = _cellMap.find(releasedSlot) != _cellMap.end();
 			bool isPlacingPhase = _gamePhase == GamePhase::PLACING;
 			bool isMovingPhase = _gamePhase == GamePhase::MOVING;
+			bool isRemovingPhase = _gamePhase == GamePhase::REMOVING;
 			bool isTargetNeighbour = IsNeighbour(_selectedSlot, releasedSlot);
 				
 			if (isTargerSlotEmpty && isSelectedSlotFull && isTargetSlotOnGrid && (isPlacingPhase || isMovingPhase && isTargetNeighbour))
@@ -149,6 +147,16 @@ void GameController::HandleSelectionReleased()
 				DeselectSlot();
 				MoveFigure(sourceSlot, releasedSlot);
 				UpdateGameState();
+				UpdateMatches(_currentPlayer);
+			}
+			else if (isRemovingPhase)
+			{
+				_sceneManager->RemoveViewBox((ViewBox*)releasedSlot->GetFigure()->GetImageBox());
+				RemoveFigure(releasedSlot);
+				_gamePhase = _previousGamePhase;
+				_sceneManager->SetPhaseLabelText(_previousPhaseLabelText);
+				UpdateGameState();
+				_selectedSlot = nullptr;
 			}
 		}
 	}
@@ -165,21 +173,31 @@ void GameController::HandleSelectionReleased()
 
 void GameController::UpdateGameState()
 {
-	if (_currentPlayer == Player::PLAYER1)
+	std::vector<Slot*> verticalMatch = GetVerticalMatch();
+	std::vector<Slot*> horizontalMatch = GetHorizontalMatch();
+
+	bool hasMatch = verticalMatch.size() > 2 || horizontalMatch.size() > 2;
+
+	if (!hasMatch)
 	{
-		_currentPlayer = Player::PLAYER2;
-		_sceneManager->SetPlayerLabelText("PLAYER 2");
-	}
-	else
-	{
-		_currentPlayer = Player::PLAYER1;
-		_sceneManager->SetPlayerLabelText("PLAYER 1");
+		if (_currentPlayer == Player::PLAYER1)
+		{
+			_currentPlayer = Player::PLAYER2;
+			_sceneManager->SetPlayerLabelText("PLAYER 2");
+		}
+		else
+		{
+			_currentPlayer = Player::PLAYER1;
+			_sceneManager->SetPlayerLabelText("PLAYER 1");
+		}
 	}
 	
 	if (_gamePhase == GamePhase::PLACING)
 	{
 		if (IsInitialSlotsEmpty())
 		{
+			_previousGamePhase = _gamePhase;
+			_previousPhaseLabelText = _sceneManager->GetPhaseLabelText();
 			_gamePhase = GamePhase::MOVING;
 			_sceneManager->SetPhaseLabelText("MOVING");
 		}
@@ -199,6 +217,20 @@ void GameController::UpdateGameState()
 			_sceneManager->SetTitleLabelText("PLAYER 2");
 			_sceneManager->SetPhaseLabelText("WINNER");
 		}
+	}
+}
+
+void GameController::UpdateMatches(Player player)
+{
+	std::vector<Slot*> verticalMatch = GetVerticalMatch();
+	std::vector<Slot*> horizontalMatch = GetHorizontalMatch();
+	
+	bool hasMatch = verticalMatch.size() > 2 && verticalMatch[0]->GetFigure()->GetOwner() == player || horizontalMatch.size() > 2 && horizontalMatch[0]->GetFigure()->GetOwner() == player;
+
+	if (hasMatch)
+	{
+		_gamePhase = GamePhase::REMOVING;
+		_sceneManager->SetPhaseLabelText("REMOVING");
 	}
 }
 
@@ -376,11 +408,11 @@ Player GameController::GetWinState()
 		}
 	}
 
-	if (numPlayer1Figures < 3 &&  _gamePhase != GamePhase::PLACING)
+	if (numPlayer1Figures < 3 &&  _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
 	{
 		winState = Player::PLAYER2;
 	}
-	else if (numPlayer2Figures < 3 && _gamePhase != GamePhase::PLACING)
+	else if (numPlayer2Figures < 3 && _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
 	{
 		winState = Player::PLAYER1;
 	}
