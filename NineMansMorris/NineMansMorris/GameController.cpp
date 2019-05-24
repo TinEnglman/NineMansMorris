@@ -140,8 +140,10 @@ void GameController::HandleSelectionReleased()
 			bool isSelectedSlotFull = _selectedSlot->GetFigure() != nullptr;
 			bool isTargetSlotOnGrid = _cellMap.find(releasedSlot) != _cellMap.end();
 			bool isPlacingPhase = _gamePhase == GamePhase::PLACING;
-
-			if (isTargerSlotEmpty && isSelectedSlotFull && isTargetSlotOnGrid && isPlacingPhase)
+			bool isMovingPhase = _gamePhase == GamePhase::MOVING;
+			bool isTargetNeighbour = IsNeighbour(_selectedSlot, releasedSlot);
+				
+			if (isTargerSlotEmpty && isSelectedSlotFull && isTargetSlotOnGrid && (isPlacingPhase || isMovingPhase && isTargetNeighbour))
 			{
 				Slot* sourceSlot = _selectedSlot;
 				DeselectSlot();
@@ -163,19 +165,43 @@ void GameController::HandleSelectionReleased()
 
 void GameController::UpdateGameState()
 {
+	if (_currentPlayer == Player::PLAYER1)
+	{
+		_currentPlayer = Player::PLAYER2;
+		_sceneManager->SetPlayerLabelText("PLAYER 2");
+	}
+	else
+	{
+		_currentPlayer = Player::PLAYER1;
+		_sceneManager->SetPlayerLabelText("PLAYER 1");
+	}
+	
 	if (_gamePhase == GamePhase::PLACING)
 	{
-		if (_currentPlayer == Player::PLAYER1)
+		if (IsInitialSlotsEmpty())
 		{
-			_currentPlayer = Player::PLAYER2;
-			_sceneManager->SetPlayerLabelText("PLAYER 2");
-		}
-		else
-		{
-			_currentPlayer = Player::PLAYER1;
-			_sceneManager->SetPlayerLabelText("PLAYER 1");
+			_gamePhase = GamePhase::MOVING;
+			_sceneManager->SetPhaseLabelText("MOVING");
 		}
 	}
+}
+
+bool GameController::IsNeighbour(Slot* slot, Slot* otherSlot)
+{
+	if (_cellMap.find(slot) == _cellMap.end())
+	{
+		return false;
+	}
+	
+	bool isNeighbour = false;
+	for (Cell* cell : _cellMap[slot]->GetNeighbours())
+	{
+		if (GetSlotFromCell(cell) == otherSlot)
+		{
+			return true;
+		}
+	}
+	return isNeighbour;
 }
 
 Player GameController::GetSlotOwner(Slot* slot)
@@ -290,4 +316,21 @@ Slot* GameController::GetSlotFromCell(Cell* cell)
 
 	std::cerr << "No matching slot found for cell. \n";
 	return nullptr;
+}
+
+bool GameController::IsInitialSlotsEmpty()
+{
+	bool isEmpty = true;
+	for (Slot* slot : _slots)
+	{
+		if (_cellMap.find(slot) == _cellMap.end())
+		{
+			if (slot->GetFigure() != nullptr)
+			{
+				return false;
+			}
+		}
+	}
+	
+	return isEmpty;
 }

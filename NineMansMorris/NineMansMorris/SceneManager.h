@@ -17,6 +17,7 @@ public:
 	int GetNumInitialSlots();
 	int GetNumBoardlSlots();
 	void SetPlayerLabelText(std::string text);
+	void SetPhaseLabelText(std::string text);
 	
 	void SetupInitialSlots();
 	void SetupBackground();

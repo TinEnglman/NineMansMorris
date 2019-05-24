@@ -25,6 +25,7 @@ private:
 	void HandleSelectionPressed();
 	void HandleSelectionReleased();
 	void UpdateGameState();
+	bool IsNeighbour(Slot* slot, Slot* otherSlot);
 
 	Player GetSlotOwner(Slot* slot);
 	std::vector<Slot*> GetVerticalMatch();
@@ -34,6 +35,7 @@ private:
 	void FindHorizontalMatch(Slot* slot, std::vector<Slot*>* match, int dept);
 
 	Slot* GetSlotFromCell(Cell* cell);
+	bool IsInitialSlotsEmpty();
 
 	
 	Board* _board = nullptr;

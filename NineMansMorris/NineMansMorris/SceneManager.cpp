@@ -114,6 +114,11 @@ void SceneManager::SetPlayerLabelText(std::string text)
 	_currentPlayerLabel->SetText(text);
 }
 
+void SceneManager::SetPhaseLabelText(std::string text)
+{
+	_currentPhaseLabel->SetText(text);
+}
+
 void SceneManager::SetupBackground()
 {
 	auto background = _viewFactory->CreateImageBox(0, 256, 768, 768, "background.png");
