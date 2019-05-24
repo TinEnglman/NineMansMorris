@@ -22,6 +22,10 @@ private:
 	Slot* GetSlotUnderPointer();
 	void OnPointerPressed();
 	void OnPointerReleased();
+	void HandleSelectionPressed();
+	void HandleSelectionReleased();
+	void UpdateGameState();
+
 	Player GetSlotOwner(Slot* slot);
 	std::vector<Slot*> GetVerticalMatch();
 	std::vector<Slot*> GetHorizontalMatch();
@@ -42,4 +46,5 @@ private:
 	std::vector<Slot*> _slots;
 
 	Player _currentPlayer = Player::PLAYER1;
+	GamePhase _gamePhase = GamePhase::PLACING;
 };

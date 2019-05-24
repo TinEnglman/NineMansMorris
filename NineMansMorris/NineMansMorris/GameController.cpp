@@ -75,6 +75,27 @@ Slot* GameController::GetSlotUnderPointer()
 
 void GameController::OnPointerPressed()
 {
+	HandleSelectionPressed();
+}
+
+void GameController::OnPointerReleased()
+{
+	HandleSelectionReleased();
+
+	std::vector<Slot*> verticalMatch = GetVerticalMatch();
+	std::vector<Slot*> horizontalMatch = GetHorizontalMatch();
+
+	if (verticalMatch.size() > 0)
+	{
+	}
+
+	if (horizontalMatch.size() > 0)
+	{
+	}
+}
+
+void GameController::HandleSelectionPressed()
+{
 	_selectionCandidateSlot = GetSlotUnderPointer();
 
 	if (_selectionCandidateSlot != nullptr)
@@ -90,10 +111,10 @@ void GameController::OnPointerPressed()
 	}
 }
 
-void GameController::OnPointerReleased()
+void GameController::HandleSelectionReleased()
 {
 	Slot* releasedSlot = GetSlotUnderPointer();
-	
+
 	if (releasedSlot != nullptr)
 	{
 		if (releasedSlot == _selectedSlot && _selectedSlot != nullptr)
@@ -117,6 +138,7 @@ void GameController::OnPointerReleased()
 				Slot* sourceSlot = _selectedSlot;
 				DeselectSlot();
 				MoveFigure(sourceSlot, releasedSlot);
+				UpdateGameState();
 			}
 		}
 	}
@@ -129,16 +151,22 @@ void GameController::OnPointerReleased()
 	}
 
 	_selectionCandidateSlot = nullptr;
+}
 
-	std::vector<Slot*> verticalMatch = GetVerticalMatch();
-	std::vector<Slot*> horizontalMatch = GetHorizontalMatch();
-
-	if (verticalMatch.size() > 0)
+void GameController::UpdateGameState()
+{
+	if (_gamePhase == GamePhase::PLACING)
 	{
-	}
-
-	if (horizontalMatch.size() > 0)
-	{
+		if (_currentPlayer == Player::PLAYER1)
+		{
+			_currentPlayer = Player::PLAYER2;
+			_sceneManager->SetPlayerLabelText("PLAYER 2");
+		}
+		else
+		{
+			_currentPlayer = Player::PLAYER1;
+			_sceneManager->SetPlayerLabelText("PLAYER 1");
+		}
 	}
 }
 

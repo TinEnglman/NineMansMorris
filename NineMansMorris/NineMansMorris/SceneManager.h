@@ -16,6 +16,7 @@ public:
 	Slot* GetBoardSlot(int index);
 	int GetNumInitialSlots();
 	int GetNumBoardlSlots();
+	void SetPlayerLabelText(std::string text);
 	
 	void SetupInitialSlots();
 	void SetupBackground();
@@ -31,5 +32,7 @@ private:
 	std::vector<ViewBox*> _viewBoxes;
 	std::vector<Slot*> _initialSlots;
 	std::vector<Slot*> _boardSlots;
+	TextBox* _currentPlayerLabel = nullptr;
+	TextBox* _currentPhaseLabel = nullptr;
 	ViewFactory* _viewFactory = nullptr;
 };
