@@ -119,6 +119,16 @@ void SceneManager::SetPhaseLabelText(std::string text)
 	_currentPhaseLabel->SetText(text);
 }
 
+void SceneManager::SetTurnLabelText(std::string text)
+{
+	_turnLabel->SetText(text);
+}
+
+void SceneManager::SetTitleLabelText(std::string text)
+{
+	_titleLabel->SetText(text);
+}
+
 void SceneManager::SetupBackground()
 {
 	auto background = _viewFactory->CreateImageBox(0, 256, 768, 768, "background.png");
@@ -138,17 +148,17 @@ void SceneManager::SetupGUI()
 	playerLabel2->SetColor(255, 255, 0);
 	AddViewBox((ViewBox*)playerLabel2);
 
-	auto turnLabel = _viewFactory->CreateTextBox(340, 15, 400, 100, "TURN");
-	turnLabel->SetColor(225, 155, 0);
-	AddViewBox((ViewBox*)turnLabel);
+	_turnLabel = _viewFactory->CreateTextBox(340, 15, 400, 100, "TURN");
+	_turnLabel->SetColor(225, 155, 0);
+	AddViewBox((ViewBox*)_turnLabel);
 
 	_currentPlayerLabel = _viewFactory->CreateTextBox(300, 65, 400, 100, "PLAYER 1");
 	_currentPlayerLabel->SetColor(255, 255, 0);
 	AddViewBox((ViewBox*)_currentPlayerLabel);
 
-	auto phaseLevel = _viewFactory->CreateTextBox(340, 140, 400, 100, "PHASE");
-	phaseLevel->SetColor(225, 155, 0);
-	AddViewBox((ViewBox*)phaseLevel);
+	_titleLabel = _viewFactory->CreateTextBox(340, 140, 400, 100, "PHASE");
+	_titleLabel->SetColor(225, 155, 0);
+	AddViewBox((ViewBox*)_titleLabel);
 
 	_currentPhaseLabel = _viewFactory->CreateTextBox(310, 190, 400, 100, "PLACING");
 	_currentPhaseLabel->SetColor(255, 255, 0);

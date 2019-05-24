@@ -18,6 +18,9 @@ public:
 	int GetNumBoardlSlots();
 	void SetPlayerLabelText(std::string text);
 	void SetPhaseLabelText(std::string text);
+	void SetTurnLabelText(std::string text);
+	void SetTitleLabelText(std::string text);
+
 	
 	void SetupInitialSlots();
 	void SetupBackground();
@@ -35,5 +38,7 @@ private:
 	std::vector<Slot*> _boardSlots;
 	TextBox* _currentPlayerLabel = nullptr;
 	TextBox* _currentPhaseLabel = nullptr;
+	TextBox* _turnLabel = nullptr;
+	TextBox* _titleLabel = nullptr;
 	ViewFactory* _viewFactory = nullptr;
 };

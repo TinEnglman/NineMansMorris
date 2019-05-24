@@ -26,6 +26,7 @@ private:
 	void HandleSelectionReleased();
 	void UpdateGameState();
 	bool IsNeighbour(Slot* slot, Slot* otherSlot);
+	Player GetWinState();
 
 	Player GetSlotOwner(Slot* slot);
 	std::vector<Slot*> GetVerticalMatch();

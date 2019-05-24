@@ -184,6 +184,22 @@ void GameController::UpdateGameState()
 			_sceneManager->SetPhaseLabelText("MOVING");
 		}
 	}
+
+	Player winState = GetWinState();
+	if (winState != Player::NONE)
+	{
+		if (winState == Player::PLAYER1)
+		{
+			_sceneManager->SetTitleLabelText("PLAYER 1");
+			_sceneManager->SetPhaseLabelText("WINNER");
+		}
+		
+		if (winState == Player::PLAYER2)
+		{
+			_sceneManager->SetTitleLabelText("PLAYER 2");
+			_sceneManager->SetPhaseLabelText("WINNER");
+		}
+	}
 }
 
 bool GameController::IsNeighbour(Slot* slot, Slot* otherSlot)
@@ -333,4 +349,41 @@ bool GameController::IsInitialSlotsEmpty()
 	}
 	
 	return isEmpty;
+}
+
+Player GameController::GetWinState()
+{
+	Player winState = Player::NONE;
+	
+	int numPlayer1Figures = 0;
+	int numPlayer2Figures = 0;
+	for (Slot* slot : _slots)
+	{
+		if (_cellMap.find(slot) != _cellMap.end())
+		{
+			if (slot->GetFigure() != nullptr)
+			{
+				if (slot->GetFigure()->GetOwner() == Player::PLAYER1)
+				{
+					numPlayer1Figures++;
+				}
+
+				if (slot->GetFigure()->GetOwner() == Player::PLAYER2)
+				{
+					numPlayer2Figures++;
+				}
+			}
+		}
+	}
+
+	if (numPlayer1Figures < 3 &&  _gamePhase != GamePhase::PLACING)
+	{
+		winState = Player::PLAYER2;
+	}
+	else if (numPlayer2Figures < 3 && _gamePhase != GamePhase::PLACING)
+	{
+		winState = Player::PLAYER1;
+	}
+	
+	return winState;
 }
