@@ -12,7 +12,7 @@ void Board::AddCell(Cell* cell)
 	_cells.push_back(cell);
 }
 
-Cell* Board::GetCell(int index)
+Cell* Board::GetCell(unsigned int index)
 {
 	if (index < 0 || index > _cells.size())
 	{

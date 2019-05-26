@@ -36,8 +36,11 @@ int main(int argc, char **argv)
 	BoardFactory* boardFactory = new BoardFactory();
 	Board *board = boardFactory->CreateBoard();
 
-	GameController* gameController = new GameController(board, mouseController, sceneManager);
+	Game* game = new Game(board, sceneManager);
+	game->Setup();
+	GameController* gameController = new GameController(game, mouseController, sceneManager);
 	gameController->Setup();
+	
 
 	while (!window->IsClosed())
 	{

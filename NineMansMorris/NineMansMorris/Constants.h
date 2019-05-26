@@ -14,3 +14,9 @@ enum class GamePhase
 	FLYING,
 	REMOVING,
 };
+
+enum class Direction
+{
+	VERTICAL,
+	HORIZONTAL
+};

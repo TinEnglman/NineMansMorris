@@ -1,26 +1,12 @@
 #include "GameController.h"
 
-GameController::GameController(Board* board, MouseController* mouseController, SceneManager* sceneManager) :
-	_board(board), _mouseController(mouseController), _sceneManager(sceneManager)
+GameController::GameController(Game* game, MouseController* mouseController, SceneManager* sceneManager) :
+	_game(game), _mouseController(mouseController), _sceneManager(sceneManager)
 {
 }
 
 void GameController::Setup()
 {
-	for (int i = 0; i < _board->GetNumCells(); i++)
-	{
-		Slot* boardSlot = _sceneManager->GetBoardSlot(i);
-		Cell* cell = _board->GetCell(i);
-		_cellMap[boardSlot] = cell;
-		_slots.push_back(boardSlot);
-	}
-
-	for (int i = 0; i < _sceneManager->GetNumInitialSlots(); i++)
-	{
-		Slot* initialSlot = _sceneManager->GetInitialSlot(i);
-		_slots.push_back(initialSlot);
-	}
-
 	std::function< void() > pressedCallback = std::bind(&GameController::OnPointerPressed, this);
 	std::function< void() > releasedCallback = std::bind(&GameController::OnPointerReleased, this);
 
@@ -31,7 +17,7 @@ void GameController::Setup()
 void GameController::SelectSlot(Slot* slot)
 {
 	_selectedSlot = slot;
-	_selectedSlot->GetFigure()->Resize(54, 54);
+	_selectedSlot->GetFigure()->Resize(54, 54); // todo add animation
 }
 void GameController::DeselectSlot()
 {
@@ -43,25 +29,14 @@ void GameController::MoveFigure(Slot* sourceSlot, Slot* destinationSlot)
 {
 	destinationSlot->SetFigure(sourceSlot->GetFigure());
 	sourceSlot->SetFigure(nullptr);
-	
-	if (_cellMap.find(sourceSlot) != _cellMap.end())
-	{
-		_cellMap[sourceSlot]->SetOwner(Player::NONE);
-	}
-
-	if (_cellMap.find(destinationSlot) != _cellMap.end())
-	{
-		_cellMap[destinationSlot]->SetOwner(destinationSlot->GetFigure()->GetOwner());
-	}
-
-	
+	_game->MoveFigure(sourceSlot, destinationSlot); // todo add animations
 	destinationSlot->UpdateFigurePosition();
-
 }
 
 void GameController::RemoveFigure(Slot* sourceSlot)
 {
 	Figure* targetFigure = sourceSlot->GetFigure();
+	_game->RemoveFigure(sourceSlot);
 	delete targetFigure;
 	sourceSlot->SetFigure(nullptr);
 }
@@ -70,14 +45,7 @@ Slot* GameController::GetSlotUnderPointer()
 {
 	int x = _mouseController->GetMousePositionX();
 	int y = _mouseController->GetMousePositionY();
-	for (Slot* slot : _slots)
-	{
-		if (slot->IsPointInRect(x, y))
-		{
-			return slot;
-		}
-	}
-	return nullptr;
+	return _game->GetSlotFromPosition(x, y);
 }
 
 void GameController::OnPointerPressed()
@@ -100,10 +68,11 @@ void GameController::HandleSelectionPressed()
 		if (figure != nullptr)
 		{
 			bool isOppositePlayer = figure->GetOwner() != _currentPlayer;
-			bool isPlacingPhase = _gamePhase == GamePhase::PLACING;
-			bool isRemovingPhase = _gamePhase == GamePhase::REMOVING;
-			bool isSelectionOnBoard = _cellMap.find(_selectionCandidateSlot) != _cellMap.end();
-			if (isOppositePlayer && !isRemovingPhase || isPlacingPhase && isSelectionOnBoard)
+			bool isPlacingPhase = _game->GetGamePhase() == GamePhase::PLACING;
+			bool isSelectionOnBoard = _game->IsSlotOnGrid(_selectionCandidateSlot);
+			bool isRemovingPhase = _game->GetGamePhase() == GamePhase::REMOVING;
+
+			if (isOppositePlayer && !isRemovingPhase || isSelectionOnBoard && isPlacingPhase)
 			{
 				_selectionCandidateSlot = nullptr;
 			}
@@ -135,11 +104,11 @@ void GameController::HandleSelectionReleased()
 		{
 			bool isTargerSlotEmpty = releasedSlot->GetFigure() == nullptr;
 			bool isSelectedSlotFull = _selectedSlot->GetFigure() != nullptr;
-			bool isTargetSlotOnGrid = _cellMap.find(releasedSlot) != _cellMap.end();
-			bool isPlacingPhase = _gamePhase == GamePhase::PLACING;
-			bool isMovingPhase = _gamePhase == GamePhase::MOVING;
-			bool isRemovingPhase = _gamePhase == GamePhase::REMOVING;
-			bool isTargetNeighbour = IsNeighbour(_selectedSlot, releasedSlot);
+			bool isTargetSlotOnGrid = _game->IsSlotOnGrid(releasedSlot);
+			bool isPlacingPhase = _game->GetGamePhase() == GamePhase::PLACING;
+			bool isMovingPhase = _game->GetGamePhase() == GamePhase::MOVING;
+			bool isRemovingPhase = _game->GetGamePhase() == GamePhase::REMOVING;
+			bool isTargetNeighbour = _game->IsNeighbour(_selectedSlot, releasedSlot);
 				
 			if (isTargerSlotEmpty && isSelectedSlotFull && isTargetSlotOnGrid && (isPlacingPhase || isMovingPhase && isTargetNeighbour))
 			{
@@ -153,7 +122,7 @@ void GameController::HandleSelectionReleased()
 			{
 				_sceneManager->RemoveViewBox((ViewBox*)releasedSlot->GetFigure()->GetImageBox());
 				RemoveFigure(releasedSlot);
-				_gamePhase = _previousGamePhase;
+				_game->SetGamePhase(_previousGamePhase);
 				_sceneManager->SetPhaseLabelText(_previousPhaseLabelText);
 				UpdateGameState();
 				_selectedSlot = nullptr;
@@ -173,11 +142,7 @@ void GameController::HandleSelectionReleased()
 
 void GameController::UpdateGameState()
 {
-	std::vector<Slot*> verticalMatch = GetVerticalMatch();
-	std::vector<Slot*> horizontalMatch = GetHorizontalMatch();
-
-
-	if (_gamePhase != GamePhase::REMOVING)
+	if (_game->GetGamePhase() != GamePhase::REMOVING)
 	{
 		if (_currentPlayer == Player::PLAYER1)
 		{
@@ -191,18 +156,18 @@ void GameController::UpdateGameState()
 		}
 	}
 	
-	if (_gamePhase == GamePhase::PLACING)
+	if (_game->GetGamePhase() == GamePhase::PLACING)
 	{
-		if (IsInitialSlotsEmpty())
+		if (_game->IsInitialSlotsEmpty())
 		{
-			_previousGamePhase = _gamePhase;
+			_previousGamePhase = _game->GetGamePhase();
 			_previousPhaseLabelText = _sceneManager->GetPhaseLabelText();
-			_gamePhase = GamePhase::MOVING;
+			_game->SetGamePhase(GamePhase::MOVING);
 			_sceneManager->SetPhaseLabelText("MOVING");
 		}
 	}
 
-	Player winState = GetWinState();
+	Player winState = _game->GetWinState();
 	if (winState != Player::NONE)
 	{
 		if (winState == Player::PLAYER1)
@@ -221,241 +186,13 @@ void GameController::UpdateGameState()
 
 void GameController::UpdateMatches(Player player)
 {
-	std::vector<Slot*> verticalMatch = GetVerticalMatch();
-	std::vector<Slot*> horizontalMatch = GetHorizontalMatch();
-	
-	bool hasMatch = false;
+	bool hasMatch = _game->HasHorizontalMatch(player) || _game->HasVerticalMatch(player);
 
-	if (verticalMatch.size() > 2 && verticalMatch[0]->GetFigure()->GetOwner() == player)
-	{
-		for (Slot* slot : verticalMatch)
-		{
-			bool containsSlot = false;
-			for (int i = 0; i < _activeVerticalSlots.size(); i++)
-			{
-				if (_activeVerticalSlots[i] == slot)
-				{
-					containsSlot = true;
-				}
-			}
-			if (!containsSlot)
-			{
-				_activeVerticalSlots.push_back(slot);
-				hasMatch = true;
-			}
-		}
-	}
+	_game->UpdateMatches(player);
 
-	if (horizontalMatch.size() > 2 && horizontalMatch[0]->GetFigure()->GetOwner() == player)
-	{
-		for (Slot* slot : horizontalMatch)
-		{
-			bool containsSlot = false;
-			for (int i = 0; i < _activeHorizontalSlots.size(); i++)
-			{
-				if (_activeHorizontalSlots[i] == slot)
-				{
-					containsSlot = true;
-				}
-			}
-			if (!containsSlot)
-			{
-				_activeHorizontalSlots.push_back(slot);
-				hasMatch = true;
-			}
-		}
-	}
-	
-	
 	if (hasMatch)
 	{
-		_gamePhase = GamePhase::REMOVING;
+		_game->SetGamePhase(GamePhase::REMOVING);
 		_sceneManager->SetPhaseLabelText("REMOVING");
 	}
-}
-
-bool GameController::IsNeighbour(Slot* slot, Slot* otherSlot)
-{
-	if (_cellMap.find(slot) == _cellMap.end())
-	{
-		return false;
-	}
-	
-	bool isNeighbour = false;
-	for (Cell* cell : _cellMap[slot]->GetNeighbours())
-	{
-		if (GetSlotFromCell(cell) == otherSlot)
-		{
-			return true;
-		}
-	}
-	return isNeighbour;
-}
-
-Player GameController::GetSlotOwner(Slot* slot)
-{
-	Cell* cell = _cellMap[slot];
-	return cell->GetOwner();
-}
-
-std::vector<Slot*> GameController::GetVerticalMatch()
-{
-	for (std::pair<Slot*, Cell*> pair : _cellMap)
-	{
-		Slot* slot = pair.first;
-		Cell* cell = pair.second;
-		
-		if (cell->GetOwner() != Player::NONE)
-		{
-			std::vector<Slot*> matchingSlots;
-			matchingSlots.push_back(slot);
-			
-			FindVerticalMatch(slot, &matchingSlots, 3);
-
-			if (matchingSlots.size() == 3)
-			{
-				return matchingSlots;
-			}
-		}
-	}
-
-	return std::vector<Slot*>();
-}
-std::vector<Slot*> GameController::GetHorizontalMatch()
-{
-
-	for (std::pair<Slot*, Cell*> pair : _cellMap)
-	{
-		Slot* slot = pair.first;
-		Cell* cell = pair.second;
-
-		if (cell->GetOwner() != Player::NONE)
-		{
-			std::vector<Slot*> matchingSlots;
-			matchingSlots.push_back(slot);
-
-			FindHorizontalMatch(slot, &matchingSlots, 3);
-
-			if (matchingSlots.size() == 3)
-			{
-				return matchingSlots;
-			}
-		}
-	}
-
-	return std::vector<Slot*>();
-}
-
-void GameController::FindVerticalMatch(Slot* slot, std::vector<Slot*>* match, int dept)
-{
-	if (dept == 1)
-	{
-		return;
-	}
-	
-	Player slotOwner = _cellMap[slot]->GetOwner();
-	std::vector<Cell*> neighbours = _cellMap[slot]->GetNeighbours();
-
-	for (Cell* candidateCell : neighbours)
-	{
-		Slot* candidateSlot = GetSlotFromCell(candidateCell);
-		Player candidateOwner = candidateCell->GetOwner();
-
-		if (candidateSlot->GetPositionX() == slot->GetPositionX() && candidateSlot->GetPositionY() > slot->GetPositionY() && candidateOwner == slotOwner)
-		{
-			match->push_back(candidateSlot);
-			FindVerticalMatch(candidateSlot, match, dept - 1);
-		}
-	}
-}
-
-void GameController::FindHorizontalMatch(Slot* slot, std::vector<Slot*>* match, int dept)
-{
-	if (dept == 1)
-	{
-		return;
-	}
-
-	Player slotOwner = _cellMap[slot]->GetOwner();
-	std::vector<Cell*> neighbours = _cellMap[slot]->GetNeighbours();
-
-	for (Cell* candidateCell : neighbours)
-	{
-		Slot* candidateSlot = GetSlotFromCell(candidateCell);
-		Player candidateOwner = candidateCell->GetOwner();
-
-		if (candidateSlot->GetPositionY() == slot->GetPositionY() && candidateSlot->GetPositionX() > slot->GetPositionX() && candidateOwner == slotOwner)
-		{
-			match->push_back(candidateSlot);
-			FindHorizontalMatch(candidateSlot, match, dept - 1);
-		}
-	}
-}
-
-Slot* GameController::GetSlotFromCell(Cell* cell)
-{
-	for (Slot* slot : _slots)
-	{
-		if (_cellMap[slot] == cell)
-		{
-			return slot;
-		}
-	}
-
-	std::cerr << "No matching slot found for cell. \n";
-	return nullptr;
-}
-
-bool GameController::IsInitialSlotsEmpty()
-{
-	bool isEmpty = true;
-	for (Slot* slot : _slots)
-	{
-		if (_cellMap.find(slot) == _cellMap.end())
-		{
-			if (slot->GetFigure() != nullptr)
-			{
-				return false;
-			}
-		}
-	}
-	
-	return isEmpty;
-}
-
-Player GameController::GetWinState()
-{
-	Player winState = Player::NONE;
-	
-	int numPlayer1Figures = 0;
-	int numPlayer2Figures = 0;
-	for (Slot* slot : _slots)
-	{
-		if (_cellMap.find(slot) != _cellMap.end())
-		{
-			if (slot->GetFigure() != nullptr)
-			{
-				if (slot->GetFigure()->GetOwner() == Player::PLAYER1)
-				{
-					numPlayer1Figures++;
-				}
-
-				if (slot->GetFigure()->GetOwner() == Player::PLAYER2)
-				{
-					numPlayer2Figures++;
-				}
-			}
-		}
-	}
-
-	if (numPlayer1Figures < 3 &&  _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
-	{
-		winState = Player::PLAYER2;
-	}
-	else if (numPlayer2Figures < 3 && _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
-	{
-		winState = Player::PLAYER1;
-	}
-	
-	return winState;
 }

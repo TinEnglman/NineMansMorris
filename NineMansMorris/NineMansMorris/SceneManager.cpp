@@ -25,7 +25,7 @@ void SceneManager::AddViewBox(ViewBox* viewBox)
 void SceneManager::RemoveViewBox(ViewBox* viewBox)
 {
 	int index = 0;
-	for (int i = 0; i < _viewBoxes.size(); i++)
+	for (unsigned int i = 0; i < _viewBoxes.size(); i++)
 	{
 		if (_viewBoxes[i] == viewBox)
 		{
@@ -36,7 +36,7 @@ void SceneManager::RemoveViewBox(ViewBox* viewBox)
 	_viewBoxes.erase(_viewBoxes.begin() + index);
 }
 
-Slot* SceneManager::GetInitialSlot(int index)
+Slot* SceneManager::GetInitialSlot(unsigned int index)
 {
 	if (index < 0 || index >= _initialSlots.size())
 	{
@@ -46,7 +46,7 @@ Slot* SceneManager::GetInitialSlot(int index)
 	return _initialSlots[index];
 }
 
-Slot* SceneManager::GetBoardSlot(int index)
+Slot* SceneManager::GetBoardSlot(unsigned int index)
 {
 	if (index < 0 || index >= _boardSlots.size())
 	{

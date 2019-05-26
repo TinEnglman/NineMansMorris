@@ -9,7 +9,7 @@ public:
 	Board();
 
 	void AddCell(Cell* cell);
-	Cell* GetCell(int index);
+	Cell* GetCell(unsigned int index);
 	int GetNumCells();
 
 private:

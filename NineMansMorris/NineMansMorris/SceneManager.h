@@ -13,8 +13,8 @@ public:
 	void Draw();
 	void AddViewBox(ViewBox* viewBox);
 	void RemoveViewBox(ViewBox* viewBox);
-	Slot* GetInitialSlot(int index);
-	Slot* GetBoardSlot(int index);
+	Slot* GetInitialSlot(unsigned int index);
+	Slot* GetBoardSlot(unsigned int index);
 	int GetNumInitialSlots();
 	int GetNumBoardlSlots();
 	void SetPlayerLabelText(std::string text);
