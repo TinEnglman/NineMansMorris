@@ -186,7 +186,7 @@ Figure* SceneManager::CreateWhiteFigure()
 	auto whitePiece = _viewFactory->CreateImageBox(0, 0, FIGURE_WIDTH, FIGURE_HEIGHT, "white_figure.png");
 	AddViewBox((ViewBox*)whitePiece);
 	
-	Figure* figure = new Figure(0);
+	Figure* figure = new Figure(PLAYER_1_INDEX);
 	figure->SetImageBox(whitePiece);
 	figure->SetOwner(Player::PLAYER1);
 
@@ -198,7 +198,7 @@ Figure* SceneManager::CreateBlackFigure()
 	auto blackPiece = _viewFactory->CreateImageBox(0, 0, FIGURE_WIDTH, FIGURE_HEIGHT, "black_figure.png");
 	AddViewBox((ViewBox*)blackPiece);
 
-	Figure* figure = new Figure(1);
+	Figure* figure = new Figure(PLAYER_2_INDEX);
 	figure->SetImageBox(blackPiece);
 	figure->SetOwner(Player::PLAYER2);
 

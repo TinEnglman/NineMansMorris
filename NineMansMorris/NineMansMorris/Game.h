@@ -22,6 +22,7 @@ public:
 	Slot* GetSlotFromCell(Cell* cell);
 	bool HasHorizontalMatch(Player player);
 	bool HasVerticalMatch(Player player);
+	bool HasMove(Player player);
 	bool IsNeighbour(Slot* slot, Slot* otherSlot);
 	bool IsSlotOnGrid(Slot* slot);
 	bool IsInitialSlotsEmpty();

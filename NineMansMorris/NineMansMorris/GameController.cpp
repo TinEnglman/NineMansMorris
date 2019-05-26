@@ -74,7 +74,8 @@ void GameController::HandleSelectionPressed()
 
 			if (isOppositePlayer && !isRemovingPhase || 
 				isSelectionOnBoard && isPlacingPhase ||
-				!isOppositePlayer && isRemovingPhase)
+				!isOppositePlayer && isRemovingPhase && isSelectionOnBoard ||
+				isRemovingPhase && !isSelectionOnBoard)
 			{
 				_selectionCandidateSlot = nullptr;
 			}

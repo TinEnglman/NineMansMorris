@@ -3,9 +3,7 @@
 Game::Game(Board* board, SceneManager* sceneManager) :
 	_board(board), _sceneManager(sceneManager)
 {
-
 }
-
 
 void Game::Setup()
 {
@@ -38,36 +36,35 @@ Player Game::GetWinState()
 {
 	Player winState = Player::NONE;
 
-	int numPlayer1Figures = 0;
-	int numPlayer2Figures = 0;
+	std::map<Player, int> numFigures;
+	std::map<Player, bool> hasMoves;
+	
 	for (Slot* slot : _slots)
 	{
 		if (_cellMap.find(slot) != _cellMap.end())
 		{
 			if (slot->GetFigure() != nullptr)
 			{
-				if (slot->GetFigure()->GetOwner() == Player::PLAYER1)
-				{
-					numPlayer1Figures++;
-				}
-
-				if (slot->GetFigure()->GetOwner() == Player::PLAYER2)
-				{
-					numPlayer2Figures++;
-				}
+				Player owner = slot->GetFigure()->GetOwner();
+				numFigures[owner]++;
 			}
 		}
 	}
 
-	if (numPlayer1Figures < MATCH_SIZE && _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
-	{
-		winState = Player::PLAYER2;
-	}
-	else if (numPlayer2Figures < MATCH_SIZE && _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
-	{
-		winState = Player::PLAYER1;
-	}
+	hasMoves[Player::PLAYER1] = HasMove(Player::PLAYER1);
+	hasMoves[Player::PLAYER2] = HasMove(Player::PLAYER2);
 
+	if (_gamePhase != GamePhase::PLACING)
+	{
+		if (numFigures[Player::PLAYER1] < MATCH_SIZE  && _gamePhase != GamePhase::REMOVING || !hasMoves[Player::PLAYER1])
+		{
+			winState = Player::PLAYER2;
+		}
+		else if (numFigures[Player::PLAYER2] < MATCH_SIZE && _gamePhase != GamePhase::REMOVING || !hasMoves[Player::PLAYER1])
+		{
+			winState = Player::PLAYER1;
+		}
+	}
 	return winState;
 }
 
@@ -110,6 +107,32 @@ bool Game::HasHorizontalMatch(Player player)
 bool Game::HasVerticalMatch(Player player)
 {
 	return GetVerticalMatch(player).size() >= MATCH_SIZE;
+}
+
+bool Game::HasMove(Player player)
+{
+	for (std::pair<Slot*, Cell*> it : _cellMap)
+	{
+		Slot* slot = it.first;
+		Cell* cell = it.second;
+		Figure* figure = slot->GetFigure();
+
+		if (figure != nullptr)
+		{
+			if (figure->GetOwner() == player)
+			{
+				for (Cell* currentCell : cell->GetNeighbours())
+				{
+					if (GetSlotFromCell(currentCell)->GetFigure() == nullptr)
+					{
+						return true;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
 }
 
 void Game::RemoveFigure(Slot* slot)

@@ -15,6 +15,9 @@ const int FONT_SIZE = 60;
 const int NUM_SLOTS = 24;
 const int NUM_FIGURES = 9;
 
+const int PLAYER_1_INDEX = 0;
+const int PLAYER_2_INDEX = 1;
+
 enum class Player
 {
 	NONE,
