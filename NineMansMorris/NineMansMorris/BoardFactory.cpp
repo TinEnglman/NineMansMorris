@@ -10,23 +10,23 @@ BoardFactory::BoardFactory()
 
 BoardFactory::~BoardFactory()
 {
-	delete[] _cellData;
+	delete _cellData;
 }
 
 Board* BoardFactory::CreateBoard()
 {
 	Board* board = new Board();
 	
-	for (int i = 0; i < NUM_SLOTS; i++)
+	for (unsigned int i = 0; i < NUM_SLOTS; i++)
 	{
 		Cell* cell = new Cell();
 		board->AddCell(cell);
 	}
 
-	for (int i = 0; i < _cellData->_cellData.size(); i++)
+	for (unsigned int i = 0; i < _cellData->_cellData.size(); i++)
 	{
 		Cell* cell = board->GetCell(i);
-		for (int index : _cellData->_cellData[i])
+		for (unsigned int index : _cellData->_cellData[i])
 		{
 			Cell* neighbourCell = board->GetCell(index);
 			cell->AddNeighbour(neighbourCell);

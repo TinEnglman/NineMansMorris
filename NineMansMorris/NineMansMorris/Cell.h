@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Constants.h"
+#include "Global.h"
 
 class Cell
 {

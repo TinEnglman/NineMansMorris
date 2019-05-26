@@ -12,9 +12,6 @@
 
 int main(int argc, char **argv)
 {
-	const int SCREEN_W = 768;
-	const int SCREEN_H = 1024;
-
 	Renderer* renderer = new Renderer();
 	Window* window = new Window("Nine Mans Morris", SCREEN_W, SCREEN_H);
 	window->Init();
@@ -36,8 +33,11 @@ int main(int argc, char **argv)
 	BoardFactory* boardFactory = new BoardFactory();
 	Board *board = boardFactory->CreateBoard();
 
-	GameController* gameController = new GameController(board, mouseController, sceneManager);
+	Game* game = new Game(board, sceneManager);
+	game->Setup();
+	GameController* gameController = new GameController(game, mouseController, sceneManager);
 	gameController->Setup();
+	
 
 	while (!window->IsClosed())
 	{

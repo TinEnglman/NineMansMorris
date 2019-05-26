@@ -1,10 +1,11 @@
 #include <iostream>
 #include "Font.h"
+#include "Global.h"
 
 
 Font::Font(const std::string path)
 {
-	int fontSize = 60;
+	int fontSize = FONT_SIZE;
 	std::string fullPath = "res/fonts/" + path;
 	
 	if (TTF_Init() == -1)

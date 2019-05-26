@@ -1,6 +1,6 @@
 #pragma once
 #include "ImageBox.h"
-#include "Constants.h"
+#include "Global.h"
 
 
 class Figure

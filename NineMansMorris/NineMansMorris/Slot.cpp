@@ -45,3 +45,34 @@ int Slot::GetPositionY()
 {
 	return _positionY;
 }
+
+void Slot::Activate(std::vector<Slot*> activeSlots, Direction direction)
+{
+	ClearActivity(direction);
+	for (Slot* slot : activeSlots)
+	{
+		_linkedActiveSlots[direction].push_back(slot);
+	}
+}
+
+void Slot::Deactivate(Direction direction)
+{
+	for (Slot* slot : _linkedActiveSlots[direction])
+	{
+		if (slot != this)
+		{
+			slot->ClearActivity(direction);
+		}
+	}
+	ClearActivity(direction);
+}
+
+bool Slot::IsActive(Direction direction)
+{
+	return _linkedActiveSlots[direction].size() > 0;
+}
+
+void Slot::ClearActivity(Direction direction)
+{
+	_linkedActiveSlots[direction].clear();
+}

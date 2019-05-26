@@ -25,7 +25,7 @@ void SceneManager::AddViewBox(ViewBox* viewBox)
 void SceneManager::RemoveViewBox(ViewBox* viewBox)
 {
 	int index = 0;
-	for (int i = 0; i < _viewBoxes.size(); i++)
+	for (unsigned int i = 0; i < _viewBoxes.size(); i++)
 	{
 		if (_viewBoxes[i] == viewBox)
 		{
@@ -36,7 +36,7 @@ void SceneManager::RemoveViewBox(ViewBox* viewBox)
 	_viewBoxes.erase(_viewBoxes.begin() + index);
 }
 
-Slot* SceneManager::GetInitialSlot(int index)
+Slot* SceneManager::GetInitialSlot(unsigned int index)
 {
 	if (index < 0 || index >= _initialSlots.size())
 	{
@@ -46,7 +46,7 @@ Slot* SceneManager::GetInitialSlot(int index)
 	return _initialSlots[index];
 }
 
-Slot* SceneManager::GetBoardSlot(int index)
+Slot* SceneManager::GetBoardSlot(unsigned int index)
 {
 	if (index < 0 || index >= _boardSlots.size())
 	{
@@ -68,7 +68,6 @@ int SceneManager::GetNumBoardlSlots()
 
 void SceneManager::SetupInitialSlots()
 {
-	const int NUM_FIGURES = 9;
 	const int NUM_ROWS = 3;
 	const int SEPARATION_X = 60;
 	const int SEPARATION_Y = 60;
@@ -94,7 +93,6 @@ void SceneManager::SetupInitialSlots()
 
 void SceneManager::SetupBoardSlots()
 {
-	const int NUM_SLOTS = 24;
 	std::array<int, NUM_SLOTS> slotPositionsX
 	{
 		76, 360, 644,
@@ -185,10 +183,10 @@ void SceneManager::SetupGUI()
 
 Figure* SceneManager::CreateWhiteFigure()
 {
-	auto whitePiece = _viewFactory->CreateImageBox(0, 0, 48, 48, "white_figure.png");
+	auto whitePiece = _viewFactory->CreateImageBox(0, 0, FIGURE_WIDTH, FIGURE_HEIGHT, "white_figure.png");
 	AddViewBox((ViewBox*)whitePiece);
 	
-	Figure* figure = new Figure(0);
+	Figure* figure = new Figure(PLAYER_1_INDEX);
 	figure->SetImageBox(whitePiece);
 	figure->SetOwner(Player::PLAYER1);
 
@@ -197,10 +195,10 @@ Figure* SceneManager::CreateWhiteFigure()
 
 Figure* SceneManager::CreateBlackFigure()
 {
-	auto blackPiece = _viewFactory->CreateImageBox(0, 0, 48, 48, "black_figure.png");
+	auto blackPiece = _viewFactory->CreateImageBox(0, 0, FIGURE_WIDTH, FIGURE_HEIGHT, "black_figure.png");
 	AddViewBox((ViewBox*)blackPiece);
 
-	Figure* figure = new Figure(1);
+	Figure* figure = new Figure(PLAYER_2_INDEX);
 	figure->SetImageBox(blackPiece);
 	figure->SetOwner(Player::PLAYER2);
 
