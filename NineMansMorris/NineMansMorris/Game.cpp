@@ -59,11 +59,11 @@ Player Game::GetWinState()
 		}
 	}
 
-	if (numPlayer1Figures < 3 && _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
+	if (numPlayer1Figures < MATCH_SIZE && _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
 	{
 		winState = Player::PLAYER2;
 	}
-	else if (numPlayer2Figures < 3 && _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
+	else if (numPlayer2Figures < MATCH_SIZE && _gamePhase != GamePhase::PLACING && _gamePhase != GamePhase::REMOVING)
 	{
 		winState = Player::PLAYER1;
 	}
@@ -105,11 +105,11 @@ Slot* Game::GetSlotFromCell(Cell* cell)
 
 bool Game::HasHorizontalMatch(Player player)
 {
-	return GetHorizontalMatch(player).size() > 2;
+	return GetHorizontalMatch(player).size() >= MATCH_SIZE;
 }
 bool Game::HasVerticalMatch(Player player)
 {
-	return GetVerticalMatch(player).size() > 2;
+	return GetVerticalMatch(player).size() >= MATCH_SIZE;
 }
 
 void Game::RemoveFigure(Slot* slot)
@@ -138,7 +138,7 @@ void Game::UpdateMatches(Player player)
 {
 	std::vector<Slot*> verticalMatch = GetVerticalMatch(player);
 	
-	if (verticalMatch.size() > 2)
+	if (verticalMatch.size() >= MATCH_SIZE)
 	{
 		for (Slot* slot : verticalMatch)
 		{
@@ -151,7 +151,7 @@ void Game::UpdateMatches(Player player)
 	
 	std::vector<Slot*> horizontalMatch = GetHorizontalMatch(player);
 
-	if (horizontalMatch.size() > 2)
+	if (horizontalMatch.size() >= MATCH_SIZE)
 	{
 		for (Slot* slot : horizontalMatch)
 		{
@@ -216,9 +216,9 @@ std::vector<Slot*> Game::GetVerticalMatch(Player player)
 			std::vector<Slot*> matchingSlots;
 			matchingSlots.push_back(slot);
 
-			FindVerticalMatch(slot, &matchingSlots, 3, player);
+			FindVerticalMatch(slot, &matchingSlots, MATCH_SIZE, player);
 
-			if (matchingSlots.size() == 3)
+			if (matchingSlots.size() == MATCH_SIZE)
 			{
 				return matchingSlots;
 			}
@@ -240,9 +240,9 @@ std::vector<Slot*> Game::GetHorizontalMatch(Player player)
 			std::vector<Slot*> matchingSlots;
 			matchingSlots.push_back(slot);
 
-			FindHorizontalMatch(slot, &matchingSlots, 3, player);
+			FindHorizontalMatch(slot, &matchingSlots, MATCH_SIZE, player);
 
-			if (matchingSlots.size() == 3)
+			if (matchingSlots.size() == MATCH_SIZE)
 			{
 				return matchingSlots;
 			}

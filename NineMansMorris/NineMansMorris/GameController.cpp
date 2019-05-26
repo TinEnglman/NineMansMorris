@@ -17,11 +17,11 @@ void GameController::Setup()
 void GameController::SelectSlot(Slot* slot)
 {
 	_selectedSlot = slot;
-	_selectedSlot->GetFigure()->Resize(54, 54); // todo add animation
+	_selectedSlot->GetFigure()->Resize(FIGURE_SELECTED_WIDTH, FIGURE_SELECTED_HEIGHT); // todo add animation
 }
 void GameController::DeselectSlot()
 {
-	_selectedSlot->GetFigure()->Resize(48, 48);
+	_selectedSlot->GetFigure()->Resize(FIGURE_WIDTH, FIGURE_HEIGHT);
 	_selectedSlot = nullptr;
 }
 

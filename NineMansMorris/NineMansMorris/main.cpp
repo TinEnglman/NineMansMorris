@@ -12,9 +12,6 @@
 
 int main(int argc, char **argv)
 {
-	const int SCREEN_W = 768;
-	const int SCREEN_H = 1024;
-
 	Renderer* renderer = new Renderer();
 	Window* window = new Window("Nine Mans Morris", SCREEN_W, SCREEN_H);
 	window->Init();

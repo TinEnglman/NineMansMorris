@@ -68,7 +68,6 @@ int SceneManager::GetNumBoardlSlots()
 
 void SceneManager::SetupInitialSlots()
 {
-	const int NUM_FIGURES = 9;
 	const int NUM_ROWS = 3;
 	const int SEPARATION_X = 60;
 	const int SEPARATION_Y = 60;
@@ -94,7 +93,6 @@ void SceneManager::SetupInitialSlots()
 
 void SceneManager::SetupBoardSlots()
 {
-	const int NUM_SLOTS = 24;
 	std::array<int, NUM_SLOTS> slotPositionsX
 	{
 		76, 360, 644,
@@ -185,7 +183,7 @@ void SceneManager::SetupGUI()
 
 Figure* SceneManager::CreateWhiteFigure()
 {
-	auto whitePiece = _viewFactory->CreateImageBox(0, 0, 48, 48, "white_figure.png");
+	auto whitePiece = _viewFactory->CreateImageBox(0, 0, FIGURE_WIDTH, FIGURE_HEIGHT, "white_figure.png");
 	AddViewBox((ViewBox*)whitePiece);
 	
 	Figure* figure = new Figure(0);
@@ -197,7 +195,7 @@ Figure* SceneManager::CreateWhiteFigure()
 
 Figure* SceneManager::CreateBlackFigure()
 {
-	auto blackPiece = _viewFactory->CreateImageBox(0, 0, 48, 48, "black_figure.png");
+	auto blackPiece = _viewFactory->CreateImageBox(0, 0, FIGURE_WIDTH, FIGURE_HEIGHT, "black_figure.png");
 	AddViewBox((ViewBox*)blackPiece);
 
 	Figure* figure = new Figure(1);

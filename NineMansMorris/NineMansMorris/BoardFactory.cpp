@@ -10,7 +10,7 @@ BoardFactory::BoardFactory()
 
 BoardFactory::~BoardFactory()
 {
-	delete[] _cellData;
+	delete _cellData;
 }
 
 Board* BoardFactory::CreateBoard()

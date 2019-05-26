@@ -4,7 +4,7 @@
 #include <map>
 
 #include "Figure.h"
-#include "Constants.h"
+#include "Global.h"
 
 
 class Slot
@@ -29,8 +29,8 @@ private:
 
 	int _positionX = 0;
 	int _positionY = 0;
-	int _width = 48;
-	int _height = 48;
+	int _width = FIGURE_WIDTH;
+	int _height = FIGURE_HEIGHT;
 	Figure* _figure = nullptr;
 	std::map<Direction, std::vector<Slot*>> _linkedActiveSlots;
 };
