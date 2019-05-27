@@ -14,6 +14,32 @@ void GameController::Setup()
 	_mouseController->SetReleasedCallback(releasedCallback);
 }
 
+void GameController::Reset()
+{
+	for (Slot* slot : _game->GetSlots())
+	{
+		if (slot->GetFigure() != nullptr)
+		{
+			_sceneManager->RemoveViewBox((ViewBox*)slot->GetFigure()->GetImageBox());
+			RemoveFigure(slot);
+		}
+	}
+	
+	_currentPlayer = Player::PLAYER1;
+	_previousGamePhase = GamePhase::PLACING;
+	_previousPhaseLabelText = "PLACING";
+	_selectedSlot = nullptr;
+	_selectionCandidateSlot = nullptr;
+	
+	_game->Reset();
+
+	_sceneManager->Reset();
+	_sceneManager->SetupInitialSlots();
+	_sceneManager->SetupBoardSlots();
+
+	_game->Setup();
+}
+
 void GameController::SelectSlot(Slot* slot)
 {
 	_selectedSlot = slot;

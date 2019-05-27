@@ -13,6 +13,7 @@ class Game
 public:
 	Game(Board* board, SceneManager* sceneManager);
 	void Setup();
+	void Reset();
 	
 	GamePhase GetGamePhase();
 	void SetGamePhase(GamePhase phase);
@@ -34,6 +35,7 @@ public:
 
 	std::vector<Slot*> GetVerticalMatch(Player player);
 	std::vector<Slot*> GetHorizontalMatch(Player player);
+	std::vector<Slot*> GetSlots();
 
 private:
 	void FindVerticalMatch(Slot* slot, std::vector<Slot*>* match, int dept, Player player);

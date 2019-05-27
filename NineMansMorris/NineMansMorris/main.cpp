@@ -19,8 +19,7 @@ int main(int argc, char **argv)
 	renderer->Init(window->GetWindow());
 	window->SetRenderer(renderer);
 
-	MouseController* mouseController = new MouseController();
-	EventController* eventController = new EventController(window, mouseController);
+
 	
 	Font* font = new Font("arial.ttf");
 	ViewFactory* viewFactory = new ViewFactory(window, renderer, font);
@@ -39,10 +38,10 @@ int main(int argc, char **argv)
 
 	Game* game = new Game(board, sceneManager);
 	game->Setup();
+	MouseController* mouseController = new MouseController();
 	GameController* gameController = new GameController(game, mouseController, sceneManager);
+	EventController* eventController = new EventController(window, mouseController, gameController);
 	gameController->Setup();
-
-
 	
 
 	while (!window->IsClosed())

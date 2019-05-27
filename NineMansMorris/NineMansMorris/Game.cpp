@@ -22,6 +22,13 @@ void Game::Setup()
 	}
 }
 
+void Game::Reset()
+{
+	_slots.clear();
+	_cellMap.clear();
+	_gamePhase = GamePhase::PLACING;
+}
+
 GamePhase Game::GetGamePhase()
 {
 	return _gamePhase;
@@ -353,3 +360,7 @@ void Game::DeactivateSlot(Slot* slot)
 	}
 }
 
+std::vector<Slot*> Game::GetSlots()
+{
+	return _slots;
+}

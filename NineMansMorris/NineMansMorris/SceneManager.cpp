@@ -120,6 +120,12 @@ void SceneManager::SetupBoardSlots()
 	}
 }
 
+void SceneManager::Reset()
+{
+	_initialSlots.clear();
+	_boardSlots.clear();
+}
+
 void SceneManager::SetPlayerLabelText(std::string text)
 {
 	_currentPlayerLabel->SetText(text);

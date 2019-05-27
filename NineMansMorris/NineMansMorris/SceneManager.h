@@ -29,6 +29,7 @@ public:
 	void SetupBackground();
 	void SetupGUI();
 	void SetupBoardSlots();
+	void Reset();
 
 private:
 	Figure* CreateWhiteFigure();
