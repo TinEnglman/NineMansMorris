@@ -17,8 +17,8 @@ void MoveAnimation::Update(float dt)
 	{
 		float timer = _time / _duration;
 
-		float currentX = _sourceX + (_destinationX - _sourceX) * timer;
-		float currentY = _sourceY + (_destinationY - _sourceY)* timer;
+		float currentX = _sourceX + (_destinationX - _sourceX) * sinf(timer * 3.14f / 2);
+		float currentY = _sourceY + (_destinationY - _sourceY) * sinf(timer * 3.14f / 2);
 
 		_animated->SetPosition((int)currentX, (int)currentY);
 	}

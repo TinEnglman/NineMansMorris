@@ -22,8 +22,7 @@ ImageBox* Figure::GetImageBox()
 
 void Figure::MoveTo(int x, int y)
 {
-	//_figureImageBox->SetPosition(x, y); 
-	MoveAnimation* moveAnimation = new MoveAnimation(_figureImageBox, x, y, 1);
+	MoveAnimation* moveAnimation = new MoveAnimation(_figureImageBox, x, y, MOVE_SPEED);
 	_animator->AddAnimation((Animation*)moveAnimation);
 }
 

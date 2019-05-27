@@ -16,7 +16,7 @@ void Animator::AddAnimation(Animation* animation)
 void Animator::Update()
 {
 	Uint32 ticks = SDL_GetTicks();
-	float dt = (ticks - _previousTicks) / (float)FPS;
+	float dt = (ticks - _previousTicks) / (float)FPS / 10.0f;
 
 	for (Animation* animation : _animations)
 	{

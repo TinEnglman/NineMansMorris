@@ -22,7 +22,7 @@ ImageBox::ImageBox(Window *window, Renderer* renderer, int x, int y, int w, int 
 	{
 		std::cerr << "Failed to create texture. \n";
 	}
-	SDL_FreeSurface(surface);
+	SDL_FreeSurface(surface); // todo save surface for identical texture reuse
 }
 
 
