@@ -1,5 +1,7 @@
 #pragma once
 
+const int FPS = 60;
+
 const int SCREEN_W = 768;
 const int SCREEN_H = 1024;
 
