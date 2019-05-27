@@ -1,5 +1,8 @@
 #pragma once
 
+const int FPS = 60;
+const float MOVE_SPEED = 0.5f;
+
 const int SCREEN_W = 768;
 const int SCREEN_H = 1024;
 
@@ -29,7 +32,6 @@ enum class GamePhase
 {
 	PLACING,
 	MOVING,
-	FLYING,
 	REMOVING,
 };
 

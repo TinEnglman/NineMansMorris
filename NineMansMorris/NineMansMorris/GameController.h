@@ -15,6 +15,7 @@ class GameController
 public:
 	GameController(Game* game, MouseController* mouseController, SceneManager* _sceneManager);
 	void Setup();
+	void Reset();
 
 private:
 	void SelectSlot(Slot *slot);

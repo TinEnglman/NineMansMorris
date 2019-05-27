@@ -5,8 +5,8 @@
 #include "ImageBox.h"
 
 
-SceneManager::SceneManager(ViewFactory* viewFactory) :
-	_viewFactory(viewFactory)
+SceneManager::SceneManager(ViewFactory* viewFactory, Animator* animator) :
+	_viewFactory(viewFactory), _animator(animator)
 {
 }
 
@@ -120,6 +120,21 @@ void SceneManager::SetupBoardSlots()
 	}
 }
 
+void SceneManager::Reset()
+{
+	for (Slot* slot : _initialSlots)
+	{
+		delete slot;
+	}
+	_initialSlots.clear();
+
+	for (Slot* slot : _boardSlots)
+	{
+		delete slot;
+	}
+	_boardSlots.clear();
+}
+
 void SceneManager::SetPlayerLabelText(std::string text)
 {
 	_currentPlayerLabel->SetText(text);
@@ -189,6 +204,7 @@ Figure* SceneManager::CreateWhiteFigure()
 	Figure* figure = new Figure(PLAYER_1_INDEX);
 	figure->SetImageBox(whitePiece);
 	figure->SetOwner(Player::PLAYER1);
+	figure->SetAnimator(_animator);
 
 	return figure;
 }
@@ -201,6 +217,7 @@ Figure* SceneManager::CreateBlackFigure()
 	Figure* figure = new Figure(PLAYER_2_INDEX);
 	figure->SetImageBox(blackPiece);
 	figure->SetOwner(Player::PLAYER2);
+	figure->SetAnimator(_animator);
 
 	return figure;
 }

@@ -1,7 +1,8 @@
 #pragma once
 #include "ImageBox.h"
 #include "Global.h"
-
+#include "Animator.h"
+#include "MoveAnimator.h"
 
 class Figure
 {
@@ -14,10 +15,12 @@ public:
 	void Resize(int w, int h);
 	Player GetOwner();
 	void SetOwner(Player owner);
+	void SetAnimator(Animator* animator);
 
 private:
 	ImageBox* _figureImageBox = nullptr;
 	int _playerIndex = 0;
 	Player _owner = Player::NONE;
+	Animator* _animator = nullptr;
 
 };

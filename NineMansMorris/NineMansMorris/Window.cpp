@@ -18,7 +18,7 @@ Window::~Window()
 	TTF_Quit();
 }
 
-bool Window::Init() // to much responsibility, refactor
+bool Window::Init()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 	{

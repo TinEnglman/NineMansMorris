@@ -1,5 +1,4 @@
 #include "ViewFactory.h"
-#include "Font.h"
 
 
 ViewFactory::ViewFactory(Window* window, Renderer* renderer, Font* font) :

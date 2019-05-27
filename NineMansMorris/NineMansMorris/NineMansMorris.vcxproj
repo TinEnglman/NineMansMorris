@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animator.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="BoardFactory.cpp" />
     <ClCompile Include="Cell.cpp" />
@@ -30,6 +31,7 @@
     <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MouseController.cpp" />
+    <ClCompile Include="MoveAnimator.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Slot.cpp" />
@@ -38,6 +40,8 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Animator.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="BoardFactory.h" />
     <ClInclude Include="Cell.h" />
@@ -50,6 +54,7 @@
     <ClInclude Include="GameController.h" />
     <ClInclude Include="ImageBox.h" />
     <ClInclude Include="MouseController.h" />
+    <ClInclude Include="MoveAnimator.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Slot.h" />

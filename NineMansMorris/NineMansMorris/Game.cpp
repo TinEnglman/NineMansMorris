@@ -22,6 +22,13 @@ void Game::Setup()
 	}
 }
 
+void Game::Reset()
+{
+	_slots.clear();
+	_cellMap.clear();
+	_gamePhase = GamePhase::PLACING;
+}
+
 GamePhase Game::GetGamePhase()
 {
 	return _gamePhase;
@@ -128,6 +135,26 @@ bool Game::HasMove(Player player)
 						return true;
 					}
 				}
+			}
+		}
+	}
+
+	return false;
+}
+
+bool Game::HasInactiveSlot(Player player)
+{
+	for (std::pair<Slot*, Cell*> it : _cellMap)
+	{
+		Slot* slot = it.first;
+		Cell* cell = it.second;
+		Figure* figure = slot->GetFigure();
+
+		if (figure != nullptr)
+		{
+			if (figure->GetOwner() == player && (!slot->IsActive(Direction::HORIZONTAL) && !slot->IsActive(Direction::VERTICAL)))
+			{
+				return true;
 			}
 		}
 	}
@@ -333,3 +360,7 @@ void Game::DeactivateSlot(Slot* slot)
 	}
 }
 
+std::vector<Slot*> Game::GetSlots()
+{
+	return _slots;
+}
