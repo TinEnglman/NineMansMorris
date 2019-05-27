@@ -71,11 +71,12 @@ void GameController::HandleSelectionPressed()
 			bool isPlacingPhase = _game->GetGamePhase() == GamePhase::PLACING;
 			bool isSelectionOnBoard = _game->IsSlotOnGrid(_selectionCandidateSlot);
 			bool isRemovingPhase = _game->GetGamePhase() == GamePhase::REMOVING;
+			bool isActive = _selectionCandidateSlot->IsActive(Direction::VERTICAL) || _selectionCandidateSlot->IsActive(Direction::HORIZONTAL);
+			bool hasOppositeActive = isOppositePlayer && _game->HasInactiveSlot(figure->GetOwner());
 
-			if (isOppositePlayer && !isRemovingPhase || 
-				isSelectionOnBoard && isPlacingPhase ||
-				!isOppositePlayer && isRemovingPhase && isSelectionOnBoard ||
-				isRemovingPhase && !isSelectionOnBoard)
+			if (!isRemovingPhase && isOppositePlayer ||
+				isPlacingPhase && isSelectionOnBoard ||
+				isRemovingPhase && (!isOppositePlayer && isSelectionOnBoard || !isSelectionOnBoard || isActive && hasOppositeActive))
 			{
 				_selectionCandidateSlot = nullptr;
 			}

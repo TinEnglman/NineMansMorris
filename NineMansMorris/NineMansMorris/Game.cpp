@@ -135,6 +135,26 @@ bool Game::HasMove(Player player)
 	return false;
 }
 
+bool Game::HasInactiveSlot(Player player)
+{
+	for (std::pair<Slot*, Cell*> it : _cellMap)
+	{
+		Slot* slot = it.first;
+		Cell* cell = it.second;
+		Figure* figure = slot->GetFigure();
+
+		if (figure != nullptr)
+		{
+			if (figure->GetOwner() == player && (!slot->IsActive(Direction::HORIZONTAL) && !slot->IsActive(Direction::VERTICAL)))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 void Game::RemoveFigure(Slot* slot)
 {
 	Player owner = slot->GetFigure()->GetOwner();

@@ -23,6 +23,7 @@ public:
 	bool HasHorizontalMatch(Player player);
 	bool HasVerticalMatch(Player player);
 	bool HasMove(Player player);
+	bool HasInactiveSlot(Player player);
 	bool IsNeighbour(Slot* slot, Slot* otherSlot);
 	bool IsSlotOnGrid(Slot* slot);
 	bool IsInitialSlotsEmpty();
