@@ -5,11 +5,12 @@
 #include "ViewFactory.h"
 #include "Figure.h"
 #include "Slot.h"
+#include "Animator.h"
 
 class SceneManager
 {
 public:
-	SceneManager(ViewFactory* viewFactory);
+	SceneManager(ViewFactory* viewFactory, Animator* animator);
 	void Draw();
 	void AddViewBox(ViewBox* viewBox);
 	void RemoveViewBox(ViewBox* viewBox);
@@ -43,4 +44,5 @@ private:
 	TextBox* _turnLabel = nullptr;
 	TextBox* _titleLabel = nullptr;
 	ViewFactory* _viewFactory = nullptr;
+	Animator* _animator = nullptr;
 };

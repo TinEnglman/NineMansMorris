@@ -30,7 +30,7 @@ void Animator::Update()
 
 	for (Animation* animation : _killList)
 	{
-		int index = 0;
+		int index = -1;
 		for (unsigned int i = 0; i < _animations.size(); i++)
 		{
 			if (_animations[i] == animation)
@@ -39,7 +39,14 @@ void Animator::Update()
 				break;
 			}
 		}
-		_animations.erase(_animations.begin() + index);
+
+		if (index != -1)
+		{
+			delete animation;
+			_animations.erase(_animations.begin() + index);
+		}
 	}
+	
+	_killList.clear();
 	_previousTicks = ticks;
 }

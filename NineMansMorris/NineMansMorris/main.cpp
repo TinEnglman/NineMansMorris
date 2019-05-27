@@ -8,6 +8,7 @@
 #include "EventController.h"
 #include "GameController.h"
 #include "BoardFactory.h"
+#include "Animator.h"
 
 
 int main(int argc, char **argv)
@@ -23,12 +24,15 @@ int main(int argc, char **argv)
 	
 	Font* font = new Font("arial.ttf");
 	ViewFactory* viewFactory = new ViewFactory(window, renderer, font);
-	SceneManager* sceneManager = new SceneManager(viewFactory);
+	Animator* animator = new Animator();
+	SceneManager* sceneManager = new SceneManager(viewFactory, animator);
 
 	sceneManager->SetupBackground();
 	sceneManager->SetupGUI();
 	sceneManager->SetupInitialSlots();
 	sceneManager->SetupBoardSlots();
+
+
 	
 	BoardFactory* boardFactory = new BoardFactory();
 	Board *board = boardFactory->CreateBoard();
@@ -37,11 +41,14 @@ int main(int argc, char **argv)
 	game->Setup();
 	GameController* gameController = new GameController(game, mouseController, sceneManager);
 	gameController->Setup();
+
+
 	
 
 	while (!window->IsClosed())
 	{
 		eventController->PollEvents();
+		animator->Update();
 		window->Clear();
 		sceneManager->Draw();
 		window->Present();

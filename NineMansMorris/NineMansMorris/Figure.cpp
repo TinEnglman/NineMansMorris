@@ -22,7 +22,9 @@ ImageBox* Figure::GetImageBox()
 
 void Figure::MoveTo(int x, int y)
 {
-	_figureImageBox->SetPosition(x, y); // todo add animator
+	//_figureImageBox->SetPosition(x, y); 
+	MoveAnimation* moveAnimation = new MoveAnimation(_figureImageBox, x, y, 1);
+	_animator->AddAnimation((Animation*)moveAnimation);
 }
 
 void Figure::Resize(int w, int h)
@@ -38,4 +40,9 @@ Player Figure::GetOwner()
 void Figure::SetOwner(Player owner)
 {
 	_owner = owner;
+}
+
+void Figure::SetAnimator(Animator* animator)
+{
+	_animator = animator;
 }

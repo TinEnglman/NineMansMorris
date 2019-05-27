@@ -9,7 +9,6 @@ class Animator
 public:
 	Animator();
 	void AddAnimation(Animation* animation);
-
 	void Update();
 
 private:
