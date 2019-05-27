@@ -122,7 +122,16 @@ void SceneManager::SetupBoardSlots()
 
 void SceneManager::Reset()
 {
+	for (Slot* slot : _initialSlots)
+	{
+		delete slot;
+	}
 	_initialSlots.clear();
+
+	for (Slot* slot : _boardSlots)
+	{
+		delete slot;
+	}
 	_boardSlots.clear();
 }
 
