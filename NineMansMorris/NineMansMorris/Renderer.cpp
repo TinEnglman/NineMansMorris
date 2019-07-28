@@ -3,8 +3,9 @@
 #include "Renderer.h"
 
 
-Renderer::Renderer()
+Renderer::Renderer(SDL_Window *window)
 {
+	_window = window;
 }
 
 Renderer::~Renderer()
@@ -18,10 +19,9 @@ SDL_Renderer* Renderer::GetRenderer()
 	return _renderer;
 }
 
-bool Renderer::Init(SDL_Window *window)
+bool Renderer::Init()
 {
-	_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
-
+	_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_PRESENTVSYNC);
 	if (_renderer == nullptr)
 	{
 		std::cerr << "Failed to create renderer.\n";

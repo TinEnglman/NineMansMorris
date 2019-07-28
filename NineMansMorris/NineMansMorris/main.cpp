@@ -13,14 +13,15 @@
 
 int main(int argc, char **argv)
 {
-	Renderer* renderer = new Renderer();
+	
 	Window* window = new Window("Nine Mans Morris", SCREEN_W, SCREEN_H);
 	window->Init();
-	renderer->Init(window->GetWindow());
+
+	Renderer* renderer = new Renderer(window->GetWindow());
+	renderer->Init();
+	
 	window->SetRenderer(renderer);
 
-
-	
 	Font* font = new Font("arial.ttf");
 	ViewFactory* viewFactory = new ViewFactory(window, renderer, font);
 	Animator* animator = new Animator();
@@ -31,8 +32,6 @@ int main(int argc, char **argv)
 	sceneManager->SetupInitialSlots();
 	sceneManager->SetupBoardSlots();
 
-
-	
 	BoardFactory* boardFactory = new BoardFactory();
 	Board *board = boardFactory->CreateBoard();
 
